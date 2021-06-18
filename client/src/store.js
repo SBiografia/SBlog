@@ -20,6 +20,11 @@ const devtools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 const composeEnhancer =
   process.env.NODE_ENV === "production" ? compose : devtools || compose;
 
+//앱의 상태를 보관하는 Redux store
+//여기서는 3가지 값을 가지고 있다.
+//createRotReducer :
+//initialState : 실제 앱의 모든 상태 초가깂
+//composeEnhancer :
 const store = createStore(
   createRootReducer(history),
   initialState,
