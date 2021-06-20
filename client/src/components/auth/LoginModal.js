@@ -49,7 +49,7 @@ const LoginModal = () => {
     e.preventDefault();
     const { email, password } = form;
     const user = { email, password };
-    console.log(user);
+    console.log("onSubmit", user);
     //authSaga.js 의 loginUser 함수에서 action.payload 와 아래 넘겨주는 값의 변수명이 동일해야함.
     dispatch({
       type: LOGIN_REQUEST,

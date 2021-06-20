@@ -11,7 +11,7 @@ const loginUserAPI = (loginData) => {
       "Content-Type": "application/json",
     },
   };
-  return axios.post("api/auth", loginData, config);
+  return axios.post("api/login", loginData, config);
 };
 
 function* loginUser(loginAction) {
@@ -31,6 +31,7 @@ function* loginUser(loginAction) {
 }
 
 function* watchLoginUser() {
+  console.log("watchLoginUser");
   yield takeEvery(LOGIN_REQUEST, loginUser);
 }
 
