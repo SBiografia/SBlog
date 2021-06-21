@@ -58,7 +58,7 @@ const AppNavbar = () => {
       <NavItem className="d-flex justify-content-center">
         <Form className="col mt-2">
           {user && user.name ? (
-            <Link>
+            <Link to={`/user/${user.name}/profile`}>
               <Button outline color="light" className="px-3" block>
                 <strong>{user ? `Welcome ${user.name}!` : ""}</strong>
               </Button>

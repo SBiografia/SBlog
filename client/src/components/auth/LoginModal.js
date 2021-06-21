@@ -65,7 +65,7 @@ const LoginModal = () => {
         <ModalHeader toggle={handleToggle}>Login</ModalHeader>
         <ModalBody>
           {localMsg ? <Alert color="danger">{localMsg}</Alert> : null}
-          <Form on onSubmit={onSubmit}>
+          <Form onSubmit={onSubmit}>
             <Label for="email">Email</Label>
             <Input
               type="email"

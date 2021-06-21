@@ -70,7 +70,7 @@ function* watchlogout() {
 
 //USER Loading
 const userLoadingAPI = (token) => {
-  console.log(token);
+  console.log("client/redux/sagas/authSaga.js => userLoadingAPI =>", token);
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -86,7 +86,7 @@ function* userLoading(action) {
   try {
     console.log(action, "userLoading");
     const result = yield call(userLoadingAPI, action.payload);
-    console.log(result);
+    console.log("client/redux/sagas/authSaga.js => userLoading =>", result);
     yield put({
       type: USER_LOADING_SUCCESS,
       payload: result.data,
