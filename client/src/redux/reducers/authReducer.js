@@ -8,6 +8,12 @@ import {
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
+  USER_LOADING_REQUEST,
+  USER_LOADING_SUCCESS,
+  USER_LOADING_FAILURE,
+  REGISTER_REQUEST,
+  REGISTER_SUCCESS,
+  REGISTER_FAILURE,
 } from "../types";
 //store.js 에 있는 것과 initialState와 동일한 이름이어야 함.
 const initialState = {
@@ -26,6 +32,7 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   // 기존 state를 ... 인 얕은 복사로 가져오는 것은 react는 기존 state에서 복사해와서 그 다음에 변화시키고 싶은 상태값을 적어주는 것이므로
   switch (action.type) {
+    case REGISTER_REQUEST:
     case LOGOUT_REQUEST:
     case LOGIN_REQUEST:
       return {
@@ -33,6 +40,7 @@ const authReducer = (state = initialState, action) => {
         errorMsg: "",
         isLoading: true,
       };
+    case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
       localStorage.setItem("token", action.payload.token);
       return {
@@ -55,6 +63,7 @@ const authReducer = (state = initialState, action) => {
         userRole: null,
         errorMsg: "",
       };
+    case REGISTER_FAILURE:
     case LOGOUT_FAILURE:
     case LOGIN_FAILURE:
       localStorage.removeItem("token");
@@ -83,6 +92,29 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         errorMsg: null,
+      };
+    case USER_LOADING_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case USER_LOADING_SUCCESS:
+      return {
+        ...state,
+        isAuthenticated: true,
+        isLoading: false,
+        user: action.payload,
+        userId: action.payload._id,
+        userName: action.payload.name,
+        userRole: action.payload.role,
+      };
+    case USER_LOADING_FAILURE:
+      return {
+        ...state,
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        userRole: "",
       };
 
     default:

@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import {
   Navbar,
   Container,
@@ -14,7 +8,6 @@ import {
   NavItem,
   Form,
   Button,
-  Alert,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import LoginModal from "./auth/LoginModal";
@@ -27,7 +20,7 @@ const AppNavbar = () => {
   const { isAuthenticated, user, userRole } = useSelector(
     (state) => state.auth
   );
-  console.log(userRole, "UserROle");
+  console.log("UserROle => ", userRole);
   const dispatch = useDispatch();
   const onLogout = useCallback(() => {
     dispatch({
@@ -107,7 +100,7 @@ const AppNavbar = () => {
           <Link to="/" className="text-white text-decoration-none">
             ㅅㅂㄹㄱ SBlog
           </Link>
-
+          <NavbarToggler onClick={handleToggle} />
           <Collapse isOpen={isOpen} navbar>
             {/* collapse 기능 이용해서 true/false일 때 인증값을 기준으로 접속자 권한을 표시해줌. */}
             <Nav
@@ -118,7 +111,6 @@ const AppNavbar = () => {
               {isAuthenticated ? authLink : guestLink}
             </Nav>
           </Collapse>
-          <NavbarToggler />
         </Container>
       </Navbar>
     </Fragment>
