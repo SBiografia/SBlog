@@ -27,16 +27,21 @@ const PostCardOne = ({ posts }) => {
                   to={`/post/${_id}`}
                   className="text-dark text-decoration-none"
                 >
-                  <Card>
+                  <Card className="mb-3">
                     <CardImg top alt="카드이미지" src={fileUrl} />
                     <CardBody>
-                      <CardTitle className="d-flex justify-content-between">
+                      <CardTitle className="text-truncate d-flex justify-content-between">
                         <span className="text-truncate">{title}</span>
                         <span>
                           <FontAwesomeIcon icon={faMouse} /> &nbsp;&nbsp;{" "}
                           <span>{views}</span>
                         </span>
                       </CardTitle>
+                      <Row>
+                        <Button color="primary" className="p-2 btn-block">
+                          More <Badge color="light">{comments.length}</Badge>
+                        </Button>
+                      </Row>
                     </CardBody>
                   </Card>
                 </Link>
