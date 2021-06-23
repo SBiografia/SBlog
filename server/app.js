@@ -32,6 +32,9 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true, //경고메시지 사라지게 하기.
+    //Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated
+    //위 옵션 에러 메시지 안보이게 하기
+    useFindAndModify: false,
   })
   .then(() => {
     console.log("MongoDB connecting Success!");
