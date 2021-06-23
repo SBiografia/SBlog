@@ -60,7 +60,7 @@ const PostWrite = () => {
       console.log(ext_name_find);
       console.log(whereImg_end);
 
-      if (ext_name_find == "jpeg") {
+      if (ext_name_find === "jpeg") {
         result_Img_Url = data.substring(whereImg_start + 10, whereImg_end + 4);
       } else {
         result_Img_Url = data.substring(whereImg_start + 10, whereImg_end + 3);
@@ -84,7 +84,7 @@ const PostWrite = () => {
   return (
     <div>
       {isAuthenticated ? (
-        <Form>
+        <Form onSubmit={onSubmit}>
           <FormGroup className="mb-3">
             <Label for="title">Title</Label>
             <Input

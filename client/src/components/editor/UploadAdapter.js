@@ -9,6 +9,7 @@ class MyUploadAdapter {
 
   // Starts the upload process.
   upload() {
+    console.log("UploadAdapter > upload() =>Starts the upload process.");
     return this.loader.file.then(
       (file) =>
         new Promise((resolve, reject) => {
@@ -21,6 +22,7 @@ class MyUploadAdapter {
 
   // Aborts the upload process.
   abort() {
+    console.log("UploadAdapter > abort() =>");
     if (this.xhr) {
       this.xhr.abort();
     }
@@ -35,6 +37,7 @@ class MyUploadAdapter {
     // a POST request with JSON as a data structure but your configuration
     // could be different.
     //xhr.open("POST", "http://example.com/image/upload/path", true);
+    console.log("UploadAdapter > _initRequest() =>");
     xhr.open(
       "POST",
       `${process.env.REACT_APP_BASIC_SERVER_URL}/api/post/image`,
@@ -48,12 +51,17 @@ class MyUploadAdapter {
     const xhr = this.xhr;
     const loader = this.loader;
     const genericErrorText = `Couldn't upload file: ${file.name}.`;
+    console.log("UploadAdapter > _initListeners() =>");
+    console.log("xhr", xhr);
+    console.log("loader", loader);
 
     xhr.addEventListener("error", () => reject(genericErrorText));
     xhr.addEventListener("abort", () => reject());
     xhr.addEventListener("load", () => {
       const response = xhr.response;
-
+      console.log(xhr.responseURL);
+      console.log(response);
+      console.log("load => ", response.url);
       // This example assumes the XHR server's "response" object will come with
       // an "error" which has its own "message" that can be passed to reject()
       // in the upload promise.
@@ -79,6 +87,7 @@ class MyUploadAdapter {
     // properties which are used e.g. to display the upload progress bar in the editor
     // user interface.
     if (xhr.upload) {
+      console.log("xhr.upload=>", xhr.upload);
       xhr.upload.addEventListener("progress", (evt) => {
         if (evt.lengthComputable) {
           loader.uploadTotal = evt.total;
@@ -91,10 +100,15 @@ class MyUploadAdapter {
   // Prepares the data and sends the request.
   _sendRequest(file) {
     // Prepare the form data.
+    console.log("UploadAdapter > _sendRequest() =>");
+    console.log(file);
     const data = new FormData();
 
-    data.append("upload", file);
+    console.log(data);
 
+    data.append("upload", file);
+    console.log("UploadAdapter > _sendRequest() =>");
+    console.log(data);
     // Important note: This is the right place to implement security mechanisms
     // like authentication and CSRF protection. For instance, you can use
     // XMLHttpRequest.setRequestHeader() to set the request headers containing
@@ -107,6 +121,7 @@ class MyUploadAdapter {
 
 // ...
 const Myinit = (editor) => {
+  console.log("UploadAdapter > Myinit() =>");
   editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
     // Configure the URL to the upload script in your back-end here!
     return new MyUploadAdapter(loader);

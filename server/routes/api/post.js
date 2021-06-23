@@ -35,17 +35,18 @@ const uploadS3 = multer({
 });
 
 // @route  POST api/post/image
-// @desc    create a Poast
+// @desc    create a Post
 // @access  Private
 //아래 라우터는 Post 작성 시 이미지를 업로드하면 Editor에 보여주는 역할로서의 라우터. 최종적으로 제출하면 등록되는 것은 나중에 다시?(36강 중)
 router.post("/image", uploadS3.array("upload", 5), async (req, res, next) => {
   try {
     console.log("server/api/post.js => ");
     console.log(req.files.map((v) => v.location));
-    res.json({ upload: true, url: req.files.map((v) => v.loaction) });
+    res.json({ uploaded: true, url: req.files.map((v) => v.location) });
+    console.log(res);
   } catch (e) {
     console.error(e);
-    res.json({ upload: false, url: null });
+    res.json({ uploaded: false, url: null });
   }
 });
 
