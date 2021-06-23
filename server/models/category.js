@@ -6,7 +6,7 @@ const CategorySchema = new mongoose.Schema({
     type: String,
     default: "미분류",
   },
-  posts: [
+  post: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "post",

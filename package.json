@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/SBiografia/SBlog#readme",
   "dependencies": {
+    "aws-sdk": "^2.932.0",
     "babel-node": "0.0.1-security",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -28,7 +29,10 @@
     "hpp": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
-    "mongoose": "^5.12.14"
+    "mongoose": "^5.12.14",
+    "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.5",

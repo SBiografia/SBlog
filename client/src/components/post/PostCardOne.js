@@ -12,15 +12,15 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMouse } from "@fortawesome/free-solid-svg-icons";
 
-//posts가 배열로 존재한다면
-//posts.map 해주는데 몽고DB 는 개개별 id를 '_id'로 표기, 그 외
+//post가 배열로 존재한다면
+//post.map 해주는데 몽고DB 는 개개별 id를 '_id'로 표기, 그 외
 //Link to 로 Router.js 에서 만들어준 postDetail로 넘어가게 할꺼임
 //text-truncate : 텍스트가 표시영역 넘어가면 ...으로 표시
-const PostCardOne = ({ posts }) => {
+const PostCardOne = ({ post }) => {
   return (
     <Fragment>
-      {Array.isArray(posts)
-        ? posts.map(({ _id, title, fileUrl, comments, views }) => {
+      {Array.isArray(post)
+        ? post.map(({ _id, title, fileUrl, comments, views }) => {
             return (
               <div key={_id} className="col-md-4">
                 <Link

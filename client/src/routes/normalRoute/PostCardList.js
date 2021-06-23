@@ -7,7 +7,7 @@ import { Row } from "reactstrap";
 import PostCardOne from "../../components/post/PostCardOne";
 
 const PostCardList = () => {
-  const { posts } = useSelector((state) => state.post);
+  const { post } = useSelector((state) => state.post);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const PostCardList = () => {
   return (
     <Fragment>
       <Helmet title="Home" />
-      <Row>{posts ? <PostCardOne posts={posts} /> : GrowingSpinner}</Row>
+      <Row>{post ? <PostCardOne post={post} /> : GrowingSpinner}</Row>
     </Fragment>
   );
 };
