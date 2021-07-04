@@ -84,10 +84,7 @@ const userLoadingAPI = (token) => {
 
 function* userLoading(action) {
   try {
-    console.log(
-      "client/redux/sagas/authSaga.js => userLoading => action",
-      action
-    );
+    // console.log("client/redux/sagas/authSaga.js => userLoading => action",  action  );
     const result = yield call(userLoadingAPI, action.payload);
     console.log(
       "client/redux/sagas/authSaga.js => userLoading => result",

@@ -2,6 +2,15 @@ import {
   POST_LOADING_SUCCESS,
   POST_LOADING_REQUEST,
   POST_LOADING_FAILURE,
+  POST_WRITE_REQUEST,
+  POST_WRITE_SUCCESS,
+  POST_WRITE_FAILURE,
+  POST_UPLOADING_FAILURE,
+  POST_UPLOADING_REQUEST,
+  POST_UPLOADING_SUCCESS,
+  POST_DETAIL_LOADING_REQUEST,
+  POST_DETAIL_LOADING_FAILURE,
+  POST_DETAIL_LOADING_SUCCESS,
 } from "../types";
 
 const initialState = {
@@ -44,6 +53,64 @@ export default function (state = initialState, action) {
       return {
         //초기값 얕은 복사
         ...state,
+        loading: false,
+      };
+    //WRITING은 언제 작성한거지.....ㄷㄷ 43강 듣는데 작성되어 있길래 부랴부랴 적음...
+    case POST_WRITE_REQUEST:
+      return {
+        ...state,
+        post: [],
+        loading: true,
+      };
+    case POST_WRITE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case POST_WRITE_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false,
+      };
+    //POST_UPLOADING
+    case POST_UPLOADING_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case POST_UPLOADING_SUCCESS:
+      return {
+        ...state,
+        posts: action.payload,
+        isAuthenticated: true,
+        loading: false,
+      };
+    case POST_UPLOADING_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false,
+      };
+    //POST LOADING DETAIL
+    case POST_DETAIL_LOADING_REQUEST:
+      return {
+        ...state,
+        post: [],
+        loading: true,
+      };
+    case POST_DETAIL_LOADING_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        postDetail: action.payload,
+        creatorId: action.payload.creator._id,
+        title: action.payload.title,
+      };
+    case POST_DETAIL_LOADING_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
         loading: false,
       };
     default:

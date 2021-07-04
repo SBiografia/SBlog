@@ -18,7 +18,7 @@ const CommentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
-  //creatorName: { type: String }, //creator 를 통해서 불러오게 되면 db를 타고타고 들어가서 user에서 이름을 가져와야 해서 별도로 만들어줌
+  creatorName: { type: String }, //creator 를 통해서 불러오게 되면 db를 타고타고 들어가서 user에서 이름을 가져와야 해서 별도로 만들어줌
 });
 
 const Comment = mongoose.model("comment", CommentSchema);

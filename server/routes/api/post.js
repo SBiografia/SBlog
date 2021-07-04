@@ -4,6 +4,7 @@ import express from "express";
 import Post from "../../models/post";
 import Category from "../../models/category";
 import User from "../../models/user";
+import Comment from "../../models/comment";
 import auth from "../../middleware/auth";
 import moment from "moment";
 import { isNullOrUndefined } from "util";
@@ -78,7 +79,7 @@ router.post("/", auth, uploadS3.none(), async (req, res, next) => {
       title,
       contents,
       fileUrl,
-      creator,
+      creator: req.user.id,
       date: moment().format("YYYY-MM-DD hh:mm:ss"),
     });
     const findResult = await Category.findOne({
@@ -139,6 +140,58 @@ router.get("/:id", async (req, res, next) => {
     res.json(post);
   } catch (e) {
     console.error(e);
+    next(e);
+  }
+});
+
+// [Comments Route]
+
+// @route Get         api/post/:id/comments
+// @desc  Get All Comments
+// @access public
+
+router.get("/:id/comments", async (req, res) => {
+  try {
+    //path는 models/post.js 의 comments와 동일하게
+    const comment = await Post.findById(req.params.id).populate({
+      path: "comments",
+    });
+    const result = comment.comments;
+    console.log("comment log", result);
+    res.json(result);
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+router.post("/:id/comments", async (req, res, next) => {
+  const newComment = await Comment.create({
+    contents: req.body.contents,
+    creator: req.body.userId,
+    creatorName: req.body.userName,
+    post: req.body.id,
+    date: moment().format("YYYY-MM-DD hh:mm:ss"),
+  });
+  console.log("newComment : ", newComment);
+  try {
+    await Post.findByIdAndUpdate(req.body.id, {
+      $push: {
+        comments: newComment._id,
+      },
+    });
+    await User.findByIdAndUpdate(req.body.userId, {
+      $push: {
+        comments: {
+          //post_id와 comment_id 둘다 부르는 이유는, 유저가 post 에 대한 글을 삭제하면 post id를 이용해서 관련된 comment_id를 다 찾아서 같이 없애주는 세트로 동작
+          //아래 변수명들은 models/user.js의 userSchema에서 comments 부분 내의 변수명과 동일하게 사용.
+          post_id: req.body.id,
+          comment_id: newComment._id,
+        },
+      },
+    });
+    res.json(newComment);
+  } catch (e) {
+    console.log(e);
     next(e);
   }
 });

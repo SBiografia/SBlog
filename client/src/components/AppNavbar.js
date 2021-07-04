@@ -20,7 +20,7 @@ const AppNavbar = () => {
   const { isAuthenticated, user, userRole } = useSelector(
     (state) => state.auth
   );
-  console.log("UserROle => ", userRole);
+  // console.log("UserROle => ", userRole);
   const dispatch = useDispatch();
   const onLogout = useCallback(() => {
     dispatch({
@@ -44,7 +44,7 @@ const AppNavbar = () => {
         {userRole === "MainJuin" ? (
           <Form className="col mt-2">
             <Link
-              to="post"
+              to="/post"
               className="btn btn-success block text-white px-3"
               onClick={addPostClick}
             >
@@ -55,7 +55,7 @@ const AppNavbar = () => {
           ""
         )}
       </NavItem>
-      <NavItem className="d-flex justify-content-center">
+      <NavItem className="d-flex justify-content-center mx-3">
         <Form className="col mt-2">
           {user && user.name ? (
             <Link to={`/user/${user.name}/profile`}>
@@ -103,11 +103,7 @@ const AppNavbar = () => {
           <NavbarToggler onClick={handleToggle} />
           <Collapse isOpen={isOpen} navbar>
             {/* collapse 기능 이용해서 true/false일 때 인증값을 기준으로 접속자 권한을 표시해줌. */}
-            <Nav
-              className="ml-auto d-flex flex-row-reverse justify-content-around"
-              navbar
-            >
-              {/* className="ml-auto d-flex justify-content-around" navbar> */}
+            <Nav className="ms-auto d-flex justify-content-around" navbar>
               {isAuthenticated ? authLink : guestLink}
             </Nav>
           </Collapse>

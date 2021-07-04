@@ -37,6 +37,9 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
+  creatorName: {
+    type: String,
+  },
 });
 
 const Post = mongoose.model("post", PostSchema);

@@ -15,7 +15,7 @@
 }
 
 #main-body {
-  min-width: 90vh;
+  min-height: 90vh;
 }
 
 .card-img-top {
@@ -39,4 +39,9 @@
 html {
   width: 100vw;
   overflow-x: hidden;
+}
+
+//comment부분에서 아래 css없으면 코멘트 적는 텍스트박스 사이즈 조절 마우스아이콘이 뜸
+textarea {
+  resize: none;
 }

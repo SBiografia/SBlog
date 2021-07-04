@@ -1,5 +1,8 @@
 import axios from "axios";
 import {
+  POST_DETAIL_LOADING_FAILURE,
+  POST_DETAIL_LOADING_REQUEST,
+  POST_DETAIL_LOADING_SUCCESS,
   POST_LOADING_FAILURE,
   POST_LOADING_REQUEST,
   POST_LOADING_SUCCESS,
@@ -66,15 +69,50 @@ function* uploadPost(action) {
       type: POST_UPLOADING_FAILURE,
       payload: e,
     });
-    yield push("/");
+    yield put(push("/"));
   }
 }
 
 function* watchUploadPost() {
-  console.log("postSaga.js/watchUploadPost Start");
+  // console.log("postSaga.js/watchUploadPost Start");
   yield takeEvery(POST_UPLOADING_REQUEST, uploadPost);
 }
 
+//Post Detail
+const loadPostDetailAPI = (payload) => {
+  //Post Detail을 가져올때는 토큰이 필요 없음. 일반적인 사람들도 내용을 볼 수 있어야 하므로.
+  // console.log(payload);
+  return axios.get(`/api/post/${payload}`);
+};
+
+function* loadPostDetail(action) {
+  // console.log("postSaga.js/loadPostDetail Start");
+  try {
+    const result = yield call(loadPostDetailAPI, action.payload);
+    console.log(result, "loadPostDetail => result");
+    console.log(action, "loadPostDetail => action");
+    yield put({
+      type: POST_DETAIL_LOADING_SUCCESS,
+      payload: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: POST_DETAIL_LOADING_FAILURE,
+      payload: e,
+    });
+    yield put(push("/"));
+  }
+}
+
+function* watchLoadPostDetail() {
+  // console.log("postSaga.js/watchLoadPostDetail Start");
+  yield takeEvery(POST_DETAIL_LOADING_REQUEST, loadPostDetail);
+}
+
 export default function* postSaga() {
-  yield all([fork(watchLoadPosts), fork(watchUploadPost)]);
+  yield all([
+    fork(watchLoadPosts),
+    fork(watchUploadPost),
+    fork(watchLoadPostDetail),
+  ]);
 }
