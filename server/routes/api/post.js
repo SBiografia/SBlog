@@ -17,6 +17,7 @@ import multerS3 from "multer-s3"; //S3가 붙은거는 AWS와 주고받을 수 �
 import path from "path"; //path는 경로를 깊게 파악할 수 있도록 도와줌
 import AWS from "aws-sdk"; //AWS를 사용할 수 있게 도와주는 개발자도구
 import dotenv from "dotenv";
+import { truncate } from "fs";
 dotenv.config();
 
 const s3 = new AWS.S3({
@@ -131,6 +132,7 @@ router.post("/", auth, uploadS3.none(), async (req, res, next) => {
 // @access      Public
 router.get("/:id", async (req, res, next) => {
   try {
+    console.log("server/routes/post.js/Detail Post");
     const post = await Post.findById(req.params.id)
       .populate("creator", "name")
       .populate({ path: "category", select: "categoryName" });
@@ -194,6 +196,34 @@ router.post("/:id/comments", async (req, res, next) => {
     console.log(e);
     next(e);
   }
+});
+
+// @route       Delete api/post/:id
+// @desc        Delete a Post
+// @access      Private
+
+router.delete("/:id", auth, async (req, res) => {
+  await Post.deleteMany({ _id: req.params.id });
+  await Comment.deleteMany({ post: req.params.id });
+  await User.findByIdAndUpdate(req.user.id, {
+    //mongoose 에서 배열에서 어떤 값을 넣을때는 $push, 뺄 때는 $pull
+    //아래 의미는 post 배열에서 req.params.id 를 찾아서 pull(빼주기)
+    //배열의 이름들은 models/user.js 와 동일하게 해주기
+    $pull: {
+      post: req.params.id,
+      comments: { post_id: req.params.id },
+    },
+  });
+  const CategoryUpdateResult = await Category.findOneAndUpdate(
+    { post: req.params.id },
+    { $pull: { post: req.params.id } },
+    { new: true }
+  ); //new 옵션을 적어줘야 업데이트가 된다고 mogoose docs에 나와있음
+
+  if (CategoryUpdateResult.post.length === 0) {
+    await Category.deleteMany({ _id: CategoryUpdateResult });
+  }
+  return res.json({ success: true });
 });
 
 //defautl 를 하는 걸 '기본 내보내기'라고 함

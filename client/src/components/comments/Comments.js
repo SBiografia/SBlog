@@ -63,7 +63,7 @@ const Comments = ({ id, userName, userId }) => {
             />
             <Button
               color="primary"
-              Block
+              block
               className="mt-2 offset-md-10 col-md-2"
             >
               Submit

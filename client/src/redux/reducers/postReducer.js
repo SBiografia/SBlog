@@ -100,6 +100,8 @@ export default function (state = initialState, action) {
         loading: true,
       };
     case POST_DETAIL_LOADING_SUCCESS:
+      // console.log("postReducer/switch/POST_DETAIL_LOADING_SUCCESS");
+      // console.log("action", action);
       return {
         ...state,
         loading: false,

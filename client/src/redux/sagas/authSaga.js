@@ -88,6 +88,7 @@ function* userLoading(action) {
     const result = yield call(userLoadingAPI, action.payload);
     console.log(
       "client/redux/sagas/authSaga.js => userLoading => result",
+      result.data.role,
       result
     );
     yield put({

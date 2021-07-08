@@ -43,6 +43,7 @@ const PostDetail = (req) => {
   }, []);
   //useEffect에 빈배열값을 넣어주지 않으면 무한반복하게 됨.
 
+  //딜리트 관련해서는 postSaga만 작성해주면 됨. 삭제해버리는 것은 별도의 상태변화가 없어서 Reducer작업은 안함
   const onDeleteClick = () => {
     dispatch({
       type: POST_DELETE_REQUEST,
@@ -96,7 +97,7 @@ const PostDetail = (req) => {
   const body = (
     <>
       {userId === creatorId ? EditButton : HomeButton}
-      <div className="d-flex border-bottom border-top border-top border-primary p-3 mb-3 justify-content-between">
+      <Row className="d-flex border-bottom border-top border-top border-primary p-3 mb-3 justify-content-between">
         {/* <Row> */}
         {(() => {
           if (postDetail && postDetail.creator) {
@@ -115,7 +116,7 @@ const PostDetail = (req) => {
             );
           }
         })()}
-      </div>
+      </Row>
 
       {postDetail && postDetail.comments ? (
         <Fragment>
