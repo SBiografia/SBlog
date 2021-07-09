@@ -12,6 +12,15 @@ import {
   POST_DELETE_REQUEST,
   POST_DELETE_FAILURE,
   POST_DELETE_SUCCESS,
+  POST_EDIT_LOADING_SUCCESS,
+  POST_EDIT_LOADING_FAILURE,
+  POST_EDIT_LOADING_REQUEST,
+  POST_EDIT_UPLOADING_SUCCESS,
+  POST_EDIT_UPLOADING_REQUEST,
+  POST_EDIT_UPLOADING_FAILURE,
+  CATEGORY_FIND_REQUEST,
+  CATEGORY_FIND_SUCCESS,
+  CATEGORY_FIND_FAILURE,
 } from "../types";
 import { put, all, fork, call, takeEvery } from "redux-saga/effects";
 import { push } from "connected-react-router";
@@ -152,11 +161,118 @@ function* watchDeletePost() {
   yield takeEvery(POST_DELETE_REQUEST, deletePost);
 }
 
+//Post EDIT LOAD
+const postEditLoadAPI = (payload) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const token = payload.token;
+  if (token) {
+    config.headers["x-auth-token"] = token;
+  }
+  return axios.get(`/api/post/${payload.id}/edit`, config);
+};
+
+function* postEditLoad(action) {
+  try {
+    const result = yield call(postEditLoadAPI, action.payload);
+    yield put({
+      type: POST_EDIT_LOADING_SUCCESS,
+      payload: result.data,
+    });
+  } catch (e) {
+    console.log("delete error", e);
+    yield put({
+      type: POST_EDIT_LOADING_FAILURE,
+      payload: e,
+    });
+    yield put(push("/"));
+  }
+}
+
+function* watchPostEditLoad() {
+  yield takeEvery(POST_EDIT_LOADING_REQUEST, postEditLoad);
+}
+
+//Post EDIT UPLOAD
+const postEditUploadAPI = (payload) => {
+  console.log(payload);
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const token = payload.token;
+  if (token) {
+    config.headers["x-auth-token"] = token;
+  }
+  console.log(config);
+  //const token = payload.token 인데 payload가 앞에 있어야 token값을 가져올 수 있음
+  return axios.post(`/api/post/${payload.id}/edit`, payload, config);
+};
+
+function* postEditUpload(action) {
+  try {
+    console.log(action);
+    const result = yield call(postEditUploadAPI, action.payload);
+    console.log("postSaga/PostEditUpload start", result);
+    yield put({
+      type: POST_EDIT_UPLOADING_SUCCESS,
+      payload: result.data,
+    });
+    yield put(push(`/post/${result.data._id}`));
+  } catch (e) {
+    console.log("delete error", e);
+    yield put({
+      type: POST_EDIT_UPLOADING_FAILURE,
+      payload: e,
+    });
+    yield put(push("/"));
+  }
+}
+
+function* watchPostEditUpload() {
+  console.log("start watch post edit upload");
+  yield takeEvery(POST_EDIT_UPLOADING_REQUEST, postEditUpload);
+}
+
+//Category Find
+const categoryFindAPI = (payload) => {
+  //encodeURIComponent : 영어가 아닌 문자들을 UTF-8로 인코딩해서 적어줌.
+  return axios.get(`/api/post/category/${encodeURIComponent(payload)}`);
+};
+
+function* categoryFind(action) {
+  try {
+    console.log("postSaga:categoryFind start");
+    const result = yield call(categoryFindAPI, action.payload);
+    console.log("postSaga:categoryFind", result);
+    yield put({
+      type: CATEGORY_FIND_SUCCESS,
+      payload: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: CATEGORY_FIND_FAILURE,
+      payload: e,
+    });
+  }
+}
+
+function* watchCategoryFind() {
+  yield takeEvery(CATEGORY_FIND_REQUEST, categoryFind);
+}
+
 export default function* postSaga() {
   yield all([
     fork(watchLoadPosts),
     fork(watchUploadPost),
     fork(watchLoadPostDetail),
     fork(watchDeletePost),
+    fork(watchPostEditLoad),
+    fork(watchPostEditUpload),
+    fork(watchCategoryFind),
   ]);
 }

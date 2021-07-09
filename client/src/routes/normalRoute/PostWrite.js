@@ -25,6 +25,8 @@ const PostWrite = () => {
   const dispatch = useDispatch();
 
   const onChange = (e) => {
+    console.log(form);
+    console.log(e.target.value);
     setValues({
       ...form,
       [e.target.name]: e.target.value,

@@ -22,7 +22,7 @@ const Comments = ({ id, userName, userId }) => {
       userName,
       userId,
     };
-    console.log(body);
+    // console.log(body);
     dispatch({
       type: COMMENT_UPLOADING_REQUEST,
       payload: body,
@@ -37,7 +37,7 @@ const Comments = ({ id, userName, userId }) => {
       ...form,
       [e.target.name]: e.target.value,
     });
-    console.log("Comments.js/onChange:", form.contents);
+    // console.log("Comments.js/onChange:", form.contents);
   };
 
   useEffect(() => {

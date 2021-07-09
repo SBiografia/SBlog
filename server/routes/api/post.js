@@ -63,8 +63,10 @@ router.post("/image", uploadS3.array("upload", 5), async (req, res, next) => {
 //async, await 는 ES6 에 나온 문법
 router.get("/", async (req, res) => {
   const postFindResult = await Post.find();
-  console.log(postFindResult, "All Post Get");
-  res.json(postFindResult);
+  const categoryFindResult = await Category.find();
+  const result = { postFindResult, categoryFindResult };
+  // console.log(postFindResult, "All Post Get");
+  res.json(result);
 });
 
 // @route     POST api/post
@@ -226,11 +228,111 @@ router.delete("/:id", auth, async (req, res) => {
   return res.json({ success: true });
 });
 
+// @route       Get api/post/:id/edit
+// @desc        Edit Post
+// @access      Private
+//edit를 찾고 post 값을 내보내주는 역할
+router.get("/:id/edit", auth, async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.params.id).populate("creator", "name");
+    res.json(post);
+  } catch (e) {
+    console.log("server/error", e);
+  }
+});
+
+router.post("/:id/edit", auth, async (req, res, next) => {
+  console.log("***********************");
+  console.log("server/api/post/:id/edit");
+  console.log("***********************");
+  //아래는 req.body.title 이랑 같은 의미인데 깔끔하게 구조분해해서 가져와줌
+  const {
+    body: { title, contents, fileUrl, category, id },
+  } = req;
+  console.log(req);
+  // console.log({ body });
+  try {
+    //findByIdAndUpdate를 할 때는 new:true 를 해줘야 함!
+    const modified_post = await Post.findByIdAndUpdate(
+      id,
+      {
+        title,
+        contents,
+        fileUrl,
+        date: moment().format("YYYY-MM-DD hh:mm:ss"),
+      },
+      { new: true }
+    );
+
+    console.log("category is ", category);
+    console.log("cateogryName is", category.categoryName);
+    const findResult = await Category.findOne({
+      categoryName: category.categoryName,
+    });
+
+    console.log("findResult is ", findResult);
+
+    if (findResult === null || findResult === undefined) {
+      console.log("findResult is null or undefined");
+      const newCategory = await Category.create({
+        categoryName: category.categoryName,
+      });
+      console.log("newCategory is", newCategory);
+      await Post.findByIdAndUpdate(modified_post._id, {
+        $push: { category: newCategory._id },
+      });
+      await Category.findByIdAndUpdate(newCategory._id, {
+        $push: { post: modified_post._id },
+      });
+      await User.findByIdAndUpdate(req.user.id, {
+        $push: { post: modified_post._id },
+      });
+    } else {
+      await Category.findByIdAndUpdate(findResult._id, {
+        $push: { post: modified_post._id },
+      });
+      await Post.findByIdAndUpdate(modified_post._id, {
+        category: findResult._id,
+      });
+      await User.findByIdAndUpdate(req.user.id, {
+        $push: { post: modified_post._id },
+      });
+    }
+
+    console.log("***********************");
+    console.log("server/edit/modified_post:", modified_post);
+    console.log("***********************");
+    res.redirect(`/api/post/${modified_post.id}`);
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
+
+router.get("/category/:categoryName", async (req, res, next) => {
+  try {
+    const result = await Category.findOne(
+      {
+        categoryName: {
+          $regex: req.params.categoryName,
+          $options: "i",
+        },
+      },
+      "post"
+    ).populate({ path: "post" });
+
+    console.log(result, "Category Find Result");
+    res.send(result);
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
+
 //defautl 를 하는 걸 '기본 내보내기'라고 함
 //오직 한 개만 내보낼 수 있게 됨
 //장점이 다른곳에서 import 할 때 자유롭게 이름을 지을 수 있음
-export default router;
-
 //이거 외에 '유명 내보내기'는 아래 형식
 //export const name = () => {}
 //import 할 때 정해놓은 '{name}'으로 불러들여야 함
+export default router;

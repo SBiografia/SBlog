@@ -5,9 +5,12 @@ import { POST_LOADING_REQUEST } from "../../redux/types";
 import { GrowingSpinner } from "../../components/spinner/Spinner";
 import { Row } from "reactstrap";
 import PostCardOne from "../../components/post/PostCardOne";
+import Category from "../../components/post/Category";
 
 const PostCardList = () => {
-  const { post } = useSelector((state) => state.post);
+  const { post, categoryFindResult, loading, postCount } = useSelector(
+    (state) => state.post
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,6 +22,9 @@ const PostCardList = () => {
   return (
     <Fragment>
       <Helmet title="Home" />
+      <Row className="border-bottom border-top border-primary py-2 mb-3">
+        <Category post={categoryFindResult} />
+      </Row>
       <Row>{post ? <PostCardOne post={post} /> : GrowingSpinner}</Row>
     </Fragment>
   );

@@ -11,6 +11,15 @@ import {
   POST_DETAIL_LOADING_REQUEST,
   POST_DETAIL_LOADING_FAILURE,
   POST_DETAIL_LOADING_SUCCESS,
+  POST_EDIT_LOADING_SUCCESS,
+  POST_EDIT_LOADING_FAILURE,
+  POST_EDIT_LOADING_REQUEST,
+  POST_EDIT_UPLOADING_FAILURE,
+  POST_EDIT_UPLOADING_REQUEST,
+  POST_EDIT_UPLOADING_SUCCESS,
+  CATEGORY_FIND_FAILURE,
+  CATEGORY_FIND_SUCCESS,
+  CATEGORY_FIND_REQUEST,
 } from "../types";
 
 const initialState = {
@@ -46,7 +55,8 @@ export default function (state = initialState, action) {
         ...state,
         //...state.post 기존것이 있으면 가져오고, ...action.payload 우리가 새로 추가한 것을 추가해줌
         //순서를 바꿔주면 화면에 보여지는 정렬에 차이가 있음.(궁금하면 직접 해보기)
-        post: [...state.post, ...action.payload],
+        post: [...state.post, ...action.payload.postFindResult],
+        categoryFindResult: action.payload.categoryFindResult,
         loading: false,
       };
     case POST_LOADING_FAILURE:
@@ -115,6 +125,75 @@ export default function (state = initialState, action) {
         error: action.payload,
         loading: false,
       };
+
+    //POST EDIT_LOADING
+    case POST_EDIT_LOADING_REQUEST:
+      //...state 의미는 기존에 있는 상태 그대로 놔두겠다는 것.
+      // post:[] 의미는 모든 post 불러들일 때 정보를 저장하는 배열
+      return {
+        ...state,
+        post: [],
+        loading: true,
+      };
+    case POST_EDIT_LOADING_SUCCESS:
+      return {
+        ...state,
+        postDetail: action.payload,
+        loading: false,
+      };
+    case POST_EDIT_LOADING_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false,
+      };
+
+    //POST EDIT_UPLOADING
+    case POST_EDIT_UPLOADING_REQUEST:
+      console.log("POST_EDIT_UPLOADING_REQUEST", state);
+      return {
+        ...state,
+        loading: true,
+      };
+    case POST_EDIT_UPLOADING_SUCCESS:
+      console.log("POST_EDIT_UPLOADING_SUCCESS", state);
+      return {
+        ...state,
+        post: action.payload,
+        isAuthenticated: true,
+        loading: false,
+      };
+    case POST_EDIT_UPLOADING_FAILURE:
+      console.log("POST_EDIT_UPLOADING_FAIL", state);
+      return {
+        ...state,
+        error: action.payload,
+        loading: false,
+      };
+
+    //CATEGORY_FIND
+    case CATEGORY_FIND_REQUEST:
+      console.log("CATEGORY_FIND_REQUEST", state);
+      return {
+        ...state,
+        post: [],
+        loading: true,
+      };
+    case CATEGORY_FIND_SUCCESS:
+      console.log("CATEGORY_FIND_SUCCESS", state);
+      return {
+        ...state,
+        categoryFindResult: action.payload,
+        loading: false,
+      };
+    case CATEGORY_FIND_FAILURE:
+      console.log("CATEGORY_FIND_FAIL", state);
+      return {
+        ...state,
+        categoryFindResult: action.payload,
+        loading: false,
+      };
+
     default:
       return state;
   }
