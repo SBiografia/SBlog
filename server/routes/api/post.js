@@ -242,134 +242,103 @@ router.get("/:id/edit", auth, async (req, res, next) => {
 });
 
 router.post("/:id/edit", auth, async (req, res, next) => {
-  ////////////----------------------------------코드 정리해주기 ----------------//////////////
-  console.log("***********************");
-  console.log("server/api/post/:id/edit");
-  console.log("***********************");
-  //아래는 req.body.title 이랑 같은 의미인데 깔끔하게 구조분해해서 가져와줌
   const {
+    //아래는 req.body.title 이랑 같은 의미인데 깔끔하게 구조분해해서 가져와줌
     body: { title, contents, fileUrl, category, id },
   } = req;
-  console.log("***********************AAAA");
-  console.log(req);
-  console.log("***********************AAAA");
+  // console.log(req);
 
   try {
-    ///////test
-    //새로 만든 category 이름이 기존 Category 중에 있는지 먼저 찾은 다음에
-    //없으면 새로 만들어주고, 있으면 기존꺼를 쓰면 됨
+    //새로 만든 category 이름이 기존 Category 중에 있는지 먼저 찾은 다음에 없으면 새로 만들어주고, 있으면 기존꺼를 쓰면 됨
 
-    //Edit 된 categoryName과 동일한 Category를 objectId를 찾는다.
-    const findResult = await Category.findOne({
+    const findResult_afterCateName = await Category.findOne({
+      //Edit 된 categoryName과 동일한 Category를 objectId를 찾는다.
       categoryName: category.categoryName,
     });
-    //req.params.id 를 가진 Category objectId를 찾는다.
-    const tempFind = await Category.findOne({ post: req.params.id });
 
-    //checkConsoleLog = 1 을 입력하면 비교하기 위해 나열했던 콘솔로그들 순서 확인 가능
+    const findResult_befoCateId = await Category.findOne({
+      //req.params.id 를 가진 Category objectId를 찾는다.
+      post: req.params.id,
+    });
+
     const checkConsoleLog = 0;
+    //checkConsoleLog = 1 을 입력하면 비교하기 위해 나열했던 콘솔로그들 순서 확인 가능
     if (checkConsoleLog) {
       console.log(req.body.category);
       console.log(category);
-      console.log(findResult);
-      console.log(tempFind);
-      if (findResult._id === category._id) {
+      console.log(findResult_afterCateName);
+      console.log(findResult_befoCateId);
+      if (findResult_afterCateName._id === category._id) {
         console.log("동일함1");
-      } else if (findResult._id === req.body.category._id) {
+      } else if (findResult_afterCateName._id === req.body.category._id) {
         console.log("동일함2");
-      } else if (findResult === req.body.category) {
+      } else if (findResult_afterCateName === req.body.category) {
         console.log("동일함3");
-      } else if (tempFind === findResult) {
+      } else if (findResult_befoCateId === findResult_afterCateName) {
         console.log("동일함4");
-      } else if (tempFind.equals(findResult)) {
+      } else if (findResult_befoCateId.equals(findResult_afterCateName)) {
         console.log("동일함5");
       } else {
         console.log("다름5");
       }
     }
 
-    if (tempFind.equals(findResult)) {
+    let newCategory = null;
+
+    if (findResult_befoCateId.equals(findResult_afterCateName)) {
       //변경한 category가 기존과 동일하다면
-      //findByIdAndUpdate를 할 때는 new:true 를 해줘야 함!
-      const modified_post = await Post.findByIdAndUpdate(
-        id,
-        {
-          title,
-          contents,
-          fileUrl,
-          category,
-          date: moment().format("YYYY-MM-DD hh:mm:ss"),
-        },
-        { new: true }
-      );
-      console.log("server/edit/modified_post:", modified_post);
-      res.redirect(`/api/post/${modified_post.id}`);
+      newCategory = category;
     } else {
-      //변경한 category가 기존과 다르다면
-      let newCategory = null;
-      if (findResult === null || findResult === undefined) {
+      //변경한 category가 기존 Category중에 없다면 새로 만들어준다.
+      if (
+        findResult_afterCateName === null ||
+        findResult_afterCateName === undefined
+      ) {
         newCategory = await Category.create({
           categoryName: category.categoryName,
         });
       } else {
-        console.log("not null/undefiend");
+        newCategory = findResult_afterCateName;
       }
-      console.log("newCategory is", newCategory);
-      console.log("findResult is ", findResult);
 
-      //findByIdAndUpdate를 할 때는 new:true 를 해줘야 함!
-      const modified_post = await Post.findByIdAndUpdate(
-        id,
-        {
-          title,
-          contents,
-          fileUrl,
-          category: newCategory,
-          date: moment().format("YYYY-MM-DD hh:mm:ss"),
-        },
-        { new: true }
-      );
-      console.log("server/edit/modified_post:", modified_post);
-      res.redirect(`/api/post/${modified_post.id}`);
-
-      //Category와 User 모델 입장에서는 만들어지는 포스트의 id를 배열에 넣어야 하니 $push가 쓰이는 것이고,($push는 기존 배열에 값을 넣는 것이고)
-      //Post 모델입장에서는 1개의 포스트 모델에서 Category 값을 찾았으니, 이를 업데이트만 해주면 되기에 $push가 사용되지 않는 것입니다.
-
+      //변경하는 category가 기존과 다를 경우, 기존cateogry ID에 들어있는 post배열을 빼준다.
       const CategoryUpdateResult = await Category.findOneAndUpdate(
         { post: req.params.id },
         { $pull: { post: req.params.id } },
         { new: true }
       ); //new 옵션을 적어줘야 업데이트가 된다고 mogoose docs에 나와있음
-
-      if (findResult === null || findResult === undefined) {
-        await Post.findByIdAndUpdate(modified_post._id, {
-          category: newCategory._id,
-          // $push: { category: newCategory._id },
-        });
-        await Category.findByIdAndUpdate(newCategory._id, {
-          $push: { post: modified_post._id },
-        });
-        await User.findByIdAndUpdate(req.user.id, {
-          $push: { post: modified_post._id },
-        });
-      } else {
-        console.log("findResult is not null/undefined");
-        await Category.findByIdAndUpdate(findResult._id, {
-          $push: { post: modified_post._id },
-        });
-        await Post.findByIdAndUpdate(modified_post._id, {
-          category: findResult._id,
-        });
-        await User.findByIdAndUpdate(req.user.id, {
-          $push: { post: modified_post._id },
-        });
-      }
-
+      //기존 배열에서 빼줬는데 길이가 0이면 기존 category리스트 삭제해준다.
       if (CategoryUpdateResult.post.length === 0) {
-        console.log("CategoryUpdateResult is 0");
         await Category.deleteMany({ _id: CategoryUpdateResult });
       }
     }
+
+    const modified_post = await Post.findByIdAndUpdate(
+      id,
+      {
+        title,
+        contents,
+        fileUrl,
+        category: newCategory,
+        date: moment().format("YYYY-MM-DD hh:mm:ss"),
+      }, //findByIdAndUpdate를 할 때는 new:true 를 해줘야 함!
+      { new: true }
+    );
+    console.log("server/edit/modified_post:", modified_post);
+
+    //Category와 User 모델 입장에서는 만들어지는 포스트의 id를 배열에 넣어야 하니 $push가 쓰이는 것이고,($push는 기존 배열에 값을 넣는 것이고)
+    //Post 모델입장에서는 1개의 포스트 모델에서 Category 값을 찾았으니, 이를 업데이트만 해주면 되기에 $push가 사용되지 않는 것입니다.
+    await Post.findByIdAndUpdate(modified_post._id, {
+      category: modified_post.category._id,
+    });
+    await Category.findByIdAndUpdate(modified_post.category._id, {
+      $push: { post: modified_post._id },
+    });
+    await User.findByIdAndUpdate(req.user.id, {
+      $push: { post: modified_post._id },
+    });
+
+    res.redirect(`/api/post/${modified_post.id}`);
   } catch (e) {
     console.log(e);
     next(e);
