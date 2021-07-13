@@ -14,6 +14,7 @@ import LoginModal from "./auth/LoginModal";
 import { LOGOUT_REQUEST } from "../redux/types";
 import { useDispatch, useSelector } from "react-redux";
 import RegisterModal from "./auth/RegisterModal";
+import SearchInput from "./search/searchInput";
 
 const AppNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -102,6 +103,7 @@ const AppNavbar = () => {
           </Link>
           <NavbarToggler onClick={handleToggle} />
           <Collapse isOpen={isOpen} navbar>
+            <SearchInput isOpen={isOpen} />
             {/* collapse 기능 이용해서 true/false일 때 인증값을 기준으로 접속자 권한을 표시해줌. */}
             <Nav className="ms-auto d-flex justify-content-around" navbar>
               {isAuthenticated ? authLink : guestLink}

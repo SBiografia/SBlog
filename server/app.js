@@ -10,6 +10,7 @@ import morgan from "morgan";
 import postRoutes from "./routes/api/post";
 import userRoutes from "./routes/api/user";
 import loginRoutes from "./routes/api/login";
+import searchRoutes from "./routes/api/search";
 
 const app = express();
 const { MONGO_URI } = config;
@@ -44,9 +45,9 @@ mongoose
   });
 
 //Use routes
-app.get("/");
 app.use("/api/post", postRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/login", loginRoutes);
+app.use("/api/search", searchRoutes);
 
 export default app;

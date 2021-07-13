@@ -14,6 +14,9 @@ import {
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
+  PASSWORD_EDIT_UPLOADING_FAILURE,
+  PASSWORD_EDIT_UPLOADING_REQUEST,
+  PASSWORD_EDIT_UPLOADING_SUCCESS,
 } from "../types";
 //store.js 에 있는 것과 initialState와 동일한 이름이어야 함.
 const initialState = {
@@ -27,6 +30,7 @@ const initialState = {
   userRole: "",
   errorMsg: "",
   successMsg: "",
+  previousMatchMsg: "",
 };
 
 const authReducer = (state = initialState, action) => {
@@ -81,17 +85,18 @@ const authReducer = (state = initialState, action) => {
     case CLEAR_ERROR_REQUEST:
       return {
         ...state,
-        errorMsg: null,
       };
     case CLEAR_ERROR_SUCCESS:
       return {
         ...state,
-        errorMsg: null,
+        errorMsg: "",
+        previousMatchMsg: "",
       };
     case CLEAR_ERROR_FAILURE:
       return {
         ...state,
-        errorMsg: null,
+        errorMsg: "Clear Error Fail",
+        previousMatchMsg: "Celar Error Fail",
       };
     case USER_LOADING_REQUEST:
       return {
@@ -115,6 +120,28 @@ const authReducer = (state = initialState, action) => {
         isAuthenticated: false,
         isLoading: false,
         userRole: "",
+      };
+
+    case PASSWORD_EDIT_UPLOADING_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case PASSWORD_EDIT_UPLOADING_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        successMsg: action.payload.data.success_msg,
+        errorMsg: "",
+        previousMatchMsg: "",
+      };
+    case PASSWORD_EDIT_UPLOADING_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        successMsg: "",
+        errorMsg: action.payload.data.fail_msg,
+        previousMatchMsg: action.payload.data.match_msg,
       };
 
     default:

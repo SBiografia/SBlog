@@ -17,6 +17,9 @@ import {
   CLEAR_ERROR_FAILURE,
   CLEAR_ERROR_SUCCESS,
   CLEAR_ERROR_REQUEST,
+  PASSWORD_EDIT_UPLOADING_SUCCESS,
+  PASSWORD_EDIT_UPLOADING_FAILURE,
+  PASSWORD_EDIT_UPLOADING_REQUEST,
 } from "../types";
 
 //LOGIN
@@ -156,6 +159,39 @@ function* watchclearError() {
   yield takeEvery(CLEAR_ERROR_REQUEST, clearError);
 }
 
+//EDIT PASSWORD
+const editPasswordAPI = (payload) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const token = payload.token;
+  if (token) {
+    config.headers["x-auth-token"] = token;
+  }
+  return axios.post(`api/user/${payload.userName}/profile`, payload, config);
+};
+
+function* editPassword(action) {
+  try {
+    const result = yield call(editPasswordAPI, action.payload);
+    yield put({
+      type: PASSWORD_EDIT_UPLOADING_SUCCESS,
+      payload: result,
+    });
+  } catch (e) {
+    yield put({
+      type: PASSWORD_EDIT_UPLOADING_FAILURE,
+      payload: e.response,
+    });
+  }
+}
+
+function* watchEditPassword() {
+  yield takeEvery(PASSWORD_EDIT_UPLOADING_REQUEST, editPassword);
+}
+
 export default function* authSaga() {
   yield all([
     fork(watchLoginUser),
@@ -163,5 +199,6 @@ export default function* authSaga() {
     fork(watchuserLoading),
     fork(watchRegisterUser),
     fork(watchclearError),
+    fork(watchEditPassword),
   ]);
 }
