@@ -59,14 +59,38 @@ router.post("/image", uploadS3.array("upload", 5), async (req, res, next) => {
   }
 });
 
-// api/post
-//async, await 는 ES6 에 나온 문법
-router.get("/", async (req, res) => {
-  const postFindResult = await Post.find();
-  const categoryFindResult = await Category.find();
-  const result = { postFindResult, categoryFindResult };
-  // console.log(postFindResult, "All Post Get");
-  res.json(result);
+// //기존 api/post 라우터 ////////
+// // api/post
+// //async, await 는 ES6 에 나온 문법
+// router.get("/", async (req, res) => {
+//   const postFindResult = await Post.find();
+//   const categoryFindResult = await Category.find();
+//   const result = { postFindResult, categoryFindResult };
+//   // console.log(postFindResult, "All Post Get");
+//   res.json(result);
+// });
+
+//  @route    GET api/post
+//  @desc     More Loading Posts
+//  @access   public
+router.get("/skip/:skip", async (req, res) => {
+  try {
+    const postCount = await Post.countDocuments();
+
+    //sort({date:-1}) : -1을 하면 최신부터 하게 됨.
+    const postFindResult = await Post.find()
+      .skip(Number(req.params.skip))
+      .limit(6)
+      .sort({ date: -1 });
+    const categoryFindResult = await Category.find();
+    const result = { postFindResult, categoryFindResult, postCount };
+    console.log(postCount);
+    console.log(postFindResult, "All Post Get");
+    res.json(result);
+  } catch (e) {
+    console.log(e);
+    res.json({ msg: "더 이상 포스트가 없습니다." });
+  }
 });
 
 // @route     POST api/post

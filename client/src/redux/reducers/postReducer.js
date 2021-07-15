@@ -49,7 +49,8 @@ export default function (state = initialState, action) {
       return {
         //초기값 얕은 복사
         ...state,
-        post: [],
+        //infinite를 안쓰면 post=[] 달아서 날려줘야 하는데, infinite scroll을 쓰게 되면 이 값을 없애줘야 계속 쌓이면서 보이게 됨
+        // post: [],
         loading: true,
       };
     case POST_LOADING_SUCCESS:
@@ -60,9 +61,11 @@ export default function (state = initialState, action) {
         //순서를 바꿔주면 화면에 보여지는 정렬에 차이가 있음.(궁금하면 직접 해보기)
         post: [...state.post, ...action.payload.postFindResult],
         categoryFindResult: action.payload.categoryFindResult,
+        postCount: action.payload.postCount,
         loading: false,
       };
     case POST_LOADING_FAILURE:
+      console.log("POST_LOADING_FAILURE");
       return {
         //초기값 얕은 복사
         ...state,

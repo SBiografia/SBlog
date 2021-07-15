@@ -29,13 +29,16 @@ import { put, all, fork, call, takeEvery } from "redux-saga/effects";
 import { push } from "connected-react-router";
 
 //All Posts load
-const loadPostAPI = () => {
-  return axios.get("/api/post");
+const loadPostAPI = (payload) => {
+  // infinite scroll 적용하기 전 코드
+  // return axios.get("/api/post");
+  // infinite scroll 적용
+  return axios.get(`/api/post/skip/${payload}`);
 };
 
-function* loadPosts() {
+function* loadPosts(action) {
   try {
-    const result = yield call(loadPostAPI);
+    const result = yield call(loadPostAPI, action.payload);
     // console.log(result, "loadPosts");
     yield put({
       type: POST_LOADING_SUCCESS,
@@ -46,7 +49,7 @@ function* loadPosts() {
       type: POST_LOADING_FAILURE,
       payload: e,
     });
-    yield push("/");
+    // yield push("/");
   }
 }
 
@@ -237,7 +240,7 @@ function* postEditUpload(action) {
 }
 
 function* watchPostEditUpload() {
-  console.log("start watch post edit upload");
+  // console.log("start watch post edit upload");
   yield takeEvery(POST_EDIT_UPLOADING_REQUEST, postEditUpload);
 }
 
