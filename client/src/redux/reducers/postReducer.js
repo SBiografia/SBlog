@@ -1,3 +1,5 @@
+/* eslint-disable import/no-anonymous-default-export */
+
 import {
   POST_LOADING_SUCCESS,
   POST_LOADING_REQUEST,
@@ -156,13 +158,11 @@ export default function (state = initialState, action) {
 
     //POST EDIT_UPLOADING
     case POST_EDIT_UPLOADING_REQUEST:
-      console.log("POST_EDIT_UPLOADING_REQUEST", state);
       return {
         ...state,
         loading: true,
       };
     case POST_EDIT_UPLOADING_SUCCESS:
-      console.log("POST_EDIT_UPLOADING_SUCCESS", state);
       return {
         ...state,
         post: action.payload,
@@ -170,7 +170,6 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case POST_EDIT_UPLOADING_FAILURE:
-      console.log("POST_EDIT_UPLOADING_FAIL", state);
       return {
         ...state,
         error: action.payload,
@@ -179,21 +178,18 @@ export default function (state = initialState, action) {
 
     //CATEGORY_FIND
     case CATEGORY_FIND_REQUEST:
-      console.log("CATEGORY_FIND_REQUEST", state);
       return {
         ...state,
         post: [],
         loading: true,
       };
     case CATEGORY_FIND_SUCCESS:
-      console.log("CATEGORY_FIND_SUCCESS", state);
       return {
         ...state,
         categoryFindResult: action.payload,
         loading: false,
       };
     case CATEGORY_FIND_FAILURE:
-      console.log("CATEGORY_FIND_FAIL", state);
       return {
         ...state,
         categoryFindResult: action.payload,

@@ -5,7 +5,7 @@ import {
   COMMENT_LOADING_REQUEST,
 } from "../../redux/types";
 import { Form, FormGroup, Row, Input, Button } from "reactstrap";
-import { BlockQuote } from "@ckeditor/ckeditor5-block-quote/src/blockquote";
+// import { BlockQuote } from "@ckeditor/ckeditor5-block-quote/src/blockquote";
 
 const Comments = ({ id, userName, userId }) => {
   const dispatch = useDispatch();

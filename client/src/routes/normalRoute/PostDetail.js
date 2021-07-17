@@ -40,7 +40,7 @@ const PostDetail = (req) => {
       type: USER_LOADING_REQUEST,
       payload: localStorage.getItem("token"),
     });
-  }, []);
+  }, [dispatch, req.match.params.id]);
   //useEffect에 빈배열값을 넣어주지 않으면 무한반복하게 됨.
 
   //딜리트 관련해서는 postSaga만 작성해주면 됨. 삭제해버리는 것은 별도의 상태변화가 없어서 Reducer작업은 안함

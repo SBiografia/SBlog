@@ -18,7 +18,12 @@ import { POST_EDIT_UPLOADING_REQUEST } from "../../redux/types";
 
 const PostEdit = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const [form, setValues] = useState({ title: "", contents: "", fileUrl: "" });
+  const [form, setValues] = useState({
+    title: "",
+    contents: "",
+    fileUrl: "",
+    category: "",
+  });
   const { postDetail } = useSelector((state) => state.post);
   const dispatch = useDispatch();
   // console.log(postDetail);
@@ -50,7 +55,7 @@ const PostEdit = () => {
     const token = localStorage.getItem("token");
     const id = postDetail._id;
     const body = { title, contents, fileUrl, category, token, id };
-    console.log(body);
+    // console.log(body);
     dispatch({
       type: POST_EDIT_UPLOADING_REQUEST,
       payload: body,
@@ -67,6 +72,7 @@ const PostEdit = () => {
       category: postDetail.category,
     });
   }, [
+    postDetail,
     postDetail.title,
     postDetail.contents,
     postDetail.fileUrl,

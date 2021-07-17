@@ -9,7 +9,7 @@ class MyUploadAdapter {
 
   // Starts the upload process.
   upload() {
-    console.log("UploadAdapter > upload() =>Starts the upload process.");
+    // console.log("UploadAdapter > upload() =>Starts the upload process.");
     return this.loader.file.then(
       (file) =>
         new Promise((resolve, reject) => {
@@ -22,7 +22,7 @@ class MyUploadAdapter {
 
   // Aborts the upload process.
   abort() {
-    console.log("UploadAdapter > abort() =>");
+    // console.log("UploadAdapter > abort() =>");
     if (this.xhr) {
       this.xhr.abort();
     }
@@ -37,7 +37,7 @@ class MyUploadAdapter {
     // a POST request with JSON as a data structure but your configuration
     // could be different.
     //xhr.open("POST", "http://example.com/image/upload/path", true);
-    console.log("UploadAdapter > _initRequest() =>");
+    // console.log("UploadAdapter > _initRequest() =>");
     xhr.open(
       "POST",
       `${process.env.REACT_APP_BASIC_SERVER_URL}/api/post/image`,
@@ -51,9 +51,9 @@ class MyUploadAdapter {
     const xhr = this.xhr;
     const loader = this.loader;
     const genericErrorText = `Couldn't upload file: ${file.name}.`;
-    console.log("UploadAdapter > _initListeners() =>");
-    console.log("xhr", xhr);
-    console.log("loader", loader);
+    // console.log("UploadAdapter > _initListeners() =>");
+    // console.log("xhr", xhr);
+    // console.log("loader", loader);
 
     xhr.addEventListener("error", () => reject(genericErrorText));
     xhr.addEventListener("abort", () => reject());
@@ -121,7 +121,7 @@ class MyUploadAdapter {
 
 // ...
 const Myinit = (editor) => {
-  console.log("UploadAdapter > Myinit() =>");
+  // console.log("UploadAdapter > Myinit() =>");
   editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
     // Configure the URL to the upload script in your back-end here!
     return new MyUploadAdapter(loader);

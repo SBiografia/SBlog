@@ -214,16 +214,16 @@ const postEditUploadAPI = (payload) => {
   if (token) {
     config.headers["x-auth-token"] = token;
   }
-  console.log(config);
+  // console.log(config);
   //const token = payload.token 인데 payload가 앞에 있어야 token값을 가져올 수 있음
   return axios.post(`/api/post/${payload.id}/edit`, payload, config);
 };
 
 function* postEditUpload(action) {
   try {
-    console.log(action);
+    // console.log(action);
     const result = yield call(postEditUploadAPI, action.payload);
-    console.log("postSaga/PostEditUpload start", result);
+    // console.log("postSaga/PostEditUpload start", result);
     yield put({
       type: POST_EDIT_UPLOADING_SUCCESS,
       payload: result.data,
@@ -252,9 +252,9 @@ const categoryFindAPI = (payload) => {
 
 function* categoryFind(action) {
   try {
-    console.log("postSaga:categoryFind start");
+    // console.log("postSaga:categoryFind start");
     const result = yield call(categoryFindAPI, action.payload);
-    console.log("postSaga:categoryFind", result);
+    // console.log("postSaga:categoryFind", result);
     yield put({
       type: CATEGORY_FIND_SUCCESS,
       payload: result.data,

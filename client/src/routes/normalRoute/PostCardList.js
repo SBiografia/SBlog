@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  Fragment,
-  useRef,
-  useCallback,
-  useState,
-} from "react";
+import React, { useEffect, Fragment, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 import { POST_LOADING_REQUEST } from "../../redux/types";
@@ -35,37 +29,31 @@ const PostCardList = () => {
   const endMsg = useRef(false);
 
   postCountRef.current = postCount - 6;
-  console.log("***Infi_01:", skipNumberRef, postCountRef, endMsg);
+  // console.log("***Infi_01:", skipNumberRef, postCountRef, endMsg);
   const useOnScreen = (options) => {
-    console.log("***Infi_02: start useOnScreen");
+    // console.log("***Infi_02: start useOnScreen");
     const lastPostElementRef = useRef();
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-      console.log("***Infi_03: start useOnScreen/useEffect");
+      // console.log("***Infi_03: start useOnScreen/useEffect");
       //observer를 달아줌. InterserctionObserver란 임계값(threshold)이 바뀌게 되면 인터섹션옵저버 객체의 콜백함수를 실행
       //여기 프로젝트에서는 lastPostElementRef 값을 달아놓은 div 값이 안보이다가 임계값만큼 변하게 되면 실행되는 것임.
       const observer = new IntersectionObserver(([entry]) => {
-        console.log("***Infi_04: useEffect/IntersectionObserver");
+        // console.log("***Infi_04: useEffect/IntersectionObserver");
         setVisible(entry.isIntersecting);
         if (entry.isIntersecting) {
-          console.log(
-            "***Infi_05: IntersectionObserver/if(entry.isIntersecting)"
-          );
+          // console.log("***Infi_05: InterObserver/if(entry.isIntersecting)");
           let remainPostCount = postCountRef.current - skipNumberRef.current;
           if (remainPostCount >= 0) {
-            console.log(
-              "***Infi_06: IntersecObserver/if(entry.isIntersecting)/remainPost"
-            );
+            // console.log("***Infi_06: InterObserver/if(entry.isIntersecting)/remainPost");
             dispatch({
               type: POST_LOADING_REQUEST,
               payload: skipNumberRef.current + 6,
             });
             skipNumberRef.current += 6;
           } else {
-            console.log(
-              "***Infi_06_2: start IntersecObserver/if(entry.isIntersecting)/noRemainPost"
-            );
+            // console.log("***Infi_06_2: start InterOb/if(entry.isIntersecting)/noRemainPost");
             endMsg.current = true;
           }
         }
@@ -73,15 +61,15 @@ const PostCardList = () => {
 
       //lastPostElementRef값이 달려있으면 observer에 달아주는데,
       if (lastPostElementRef.current) {
-        console.log("***Infi_07: useEffect/if(lastPostEleRef.current)");
+        // console.log("***Infi_07: useEffect/if(lastPostEleRef.current)");
         observer.observe(lastPostElementRef.current);
       }
 
       //달아주고 observer실행되고 나서 useEffect 끝나면 바로 끊어주는 작업을 함.
       const LastElememntReturnFunc = () => {
-        console.log("***Infi_08: useEffect/LastEleRetrunFunc");
+        // console.log("***Infi_08: useEffect/LastEleRetrunFunc");
         if (lastPostElementRef.current) {
-          console.log("***Infi_09: useEffect/LastEleRetrunFunc/if문");
+          // console.log("***Infi_09: useEffect/LastEleRetrunFunc/if문");
           observer.unobserve(lastPostElementRef.current);
         }
       };
