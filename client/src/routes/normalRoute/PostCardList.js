@@ -1,7 +1,10 @@
 import React, { useEffect, Fragment, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
-import { POST_LOADING_REQUEST } from "../../redux/types";
+import {
+  POST_LOADING_REQUEST,
+  POST_LOADING_REQUEST_FIRST,
+} from "../../redux/types";
 import { GrowingSpinner } from "../../components/spinner/Spinner";
 import { Row, Alert, Button } from "reactstrap";
 import PostCardOne from "../../components/post/PostCardOne";
@@ -16,9 +19,10 @@ const PostCardList = () => {
   //option (TRUE)= infinite Scroll, option(FALSE) = button
   const infiniteScrollOption = true;
 
+  console.log("dispatch", dispatch);
+  console.log(post);
   useEffect(() => {
-    console.log("dispatch first ");
-    dispatch({ type: POST_LOADING_REQUEST, payload: 0 });
+    dispatch({ type: POST_LOADING_REQUEST_FIRST, payload: 0 });
   }, [dispatch]);
 
   //infinite Scroll : 처음에  0값 넘겨주고 그 후 request하면 postCount값에서 6개를 빼서 넘겨주고, 6개를 넘겨주고 하는 방식, 남은 숫자가 있을때까지 반복.

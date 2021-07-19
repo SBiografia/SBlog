@@ -76,7 +76,7 @@ router.post("/image", uploadS3.array("upload", 5), async (req, res, next) => {
 router.get("/skip/:skip", async (req, res) => {
   try {
     const postCount = await Post.countDocuments();
-
+    console.log(req.params);
     //sort({date:-1}) : -1을 하면 최신부터 하게 됨.
     const postFindResult = await Post.find()
       .skip(Number(req.params.skip))
@@ -85,7 +85,7 @@ router.get("/skip/:skip", async (req, res) => {
     const categoryFindResult = await Category.find();
     const result = { postFindResult, categoryFindResult, postCount };
     console.log(postCount);
-    console.log(postFindResult, "All Post Get");
+    // console.log(postFindResult, "All Post Get");
     res.json(result);
   } catch (e) {
     console.log(e);
@@ -158,13 +158,13 @@ router.post("/", auth, uploadS3.none(), async (req, res, next) => {
 // @access      Public
 router.get("/:id", async (req, res, next) => {
   try {
-    console.log("server/routes/post.js/Detail Post");
+    // console.log("server/routes/post.js/Detail Post");
     const post = await Post.findById(req.params.id)
       .populate("creator", "name")
       .populate({ path: "category", select: "categoryName" });
     post.views += 1;
     post.save();
-    console.log(post);
+    // console.log(post);
     res.json(post);
   } catch (e) {
     console.error(e);
@@ -185,7 +185,7 @@ router.get("/:id/comments", async (req, res) => {
       path: "comments",
     });
     const result = comment.comments;
-    console.log("comment log", result);
+    // console.log("comment log", result);
     res.json(result);
   } catch (e) {
     console.log(e);

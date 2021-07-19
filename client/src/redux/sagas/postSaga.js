@@ -5,6 +5,7 @@ import {
   POST_DETAIL_LOADING_SUCCESS,
   POST_LOADING_FAILURE,
   POST_LOADING_REQUEST,
+  POST_LOADING_REQUEST_FIRST,
   POST_LOADING_SUCCESS,
   POST_UPLOADING_FAILURE,
   POST_UPLOADING_REQUEST,
@@ -56,7 +57,9 @@ function* loadPosts(action) {
 function* watchLoadPosts() {
   yield takeEvery(POST_LOADING_REQUEST, loadPosts);
 }
-
+function* watchLoadFirstPosts() {
+  yield takeEvery(POST_LOADING_REQUEST_FIRST, loadPosts);
+}
 //Post Upload
 const uploadPostAPI = (payload) => {
   const config = {
@@ -307,5 +310,6 @@ export default function* postSaga() {
     fork(watchPostEditUpload),
     fork(watchCategoryFind),
     fork(watchSearchResult),
+    fork(watchLoadFirstPosts),
   ]);
 }

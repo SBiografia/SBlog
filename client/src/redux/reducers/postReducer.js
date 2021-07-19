@@ -3,6 +3,7 @@
 import {
   POST_LOADING_SUCCESS,
   POST_LOADING_REQUEST,
+  POST_LOADING_REQUEST_FIRST,
   POST_LOADING_FAILURE,
   POST_WRITE_REQUEST,
   POST_WRITE_SUCCESS,
@@ -34,6 +35,7 @@ const initialState = {
   postDetail: "",
   //총 post의 개수 -> 추후 infinite scroll 구현을 위함.
   postCount: "",
+
   loading: false,
   error: "",
   creatorId: "",
@@ -47,13 +49,23 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case POST_LOADING_REQUEST_FIRST:
+      console.log(state);
+      return {
+        //초기값 얕은 복사
+        ...state,
+        //최초로 불러올때는 Post를 다 날려줌
+        post: [],
+        loading: true,
+      };
     case POST_LOADING_REQUEST:
+      console.log(state);
       return {
         //초기값 얕은 복사
         ...state,
         //infinite를 안쓰면 post=[] 달아서 날려줘야 하는데, infinite scroll을 쓰게 되면 이 값을 없애줘야 계속 쌓이면서 보이게 됨
         // post: [],
-        post: state.post.length === 0 ? [] : [...state.post],
+        // post: state.post.length === 0 ? [] : [...state.post],
         loading: true,
       };
     case POST_LOADING_SUCCESS:

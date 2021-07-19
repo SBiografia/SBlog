@@ -20,6 +20,7 @@ import {
 } from "reactstrap";
 
 const Profile = () => {
+  console.log("Start Profile");
   const { userId, errorMsg, successMsg, previousMatchMsg } = useSelector(
     (state) => state.auth
   );

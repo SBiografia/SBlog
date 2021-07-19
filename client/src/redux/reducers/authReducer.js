@@ -54,6 +54,7 @@ const authReducer = (state = initialState, action) => {
         isLoading: false,
         userId: action.payload.user.id,
         userRole: action.payload.user.role,
+        userName: action.payload.user.name,
         errorMsg: "",
       };
     case LOGOUT_SUCCESS:
@@ -62,6 +63,7 @@ const authReducer = (state = initialState, action) => {
         token: null,
         user: null,
         userId: null,
+        userName: null,
         isAuthenticated: false,
         isLoading: false,
         userRole: null,
@@ -78,6 +80,7 @@ const authReducer = (state = initialState, action) => {
         user: null,
         userId: null,
         userRole: null,
+        userName: null,
         isAuthenticated: false,
         isLoading: false,
         errorMsg: action.payload.data.msg,
