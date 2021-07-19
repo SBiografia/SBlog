@@ -6,6 +6,7 @@ import MyRouter from "./routes/Router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/custom.scss";
 const App = () => {
+  console.log("start Front");
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>

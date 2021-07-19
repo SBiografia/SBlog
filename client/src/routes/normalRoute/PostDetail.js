@@ -85,7 +85,7 @@ const PostDetail = (req) => {
     <Fragment>
       <Row className="d-flex justify-content-center pb-3">
         <Col className="col-sm-12 com-md-3">
-          <Link to="/" className="btn btn-primary btn-block">
+          <Link to="/post/skip" className="btn btn-primary btn-block">
             Home
           </Link>
         </Col>

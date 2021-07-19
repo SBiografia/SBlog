@@ -53,6 +53,7 @@ export default function (state = initialState, action) {
         ...state,
         //infinite를 안쓰면 post=[] 달아서 날려줘야 하는데, infinite scroll을 쓰게 되면 이 값을 없애줘야 계속 쌓이면서 보이게 됨
         // post: [],
+        post: state.post.length === 0 ? [] : [...state.post],
         loading: true,
       };
     case POST_LOADING_SUCCESS:

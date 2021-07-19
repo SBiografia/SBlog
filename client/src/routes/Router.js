@@ -20,9 +20,11 @@ const MyRouter = () => (
   <Fragment>
     <AppNavbar />
     <Header />
-    <h1>Hello Body</h1>
+    {/* <h1>Hello Body</h1> */}
+
     <Container id="main-body">
       <Switch>
+        {console.log("hello")}
         <Route path="/" exact component={PostCardList} />
         <Route path="/post" exact component={PostWrite} />
         <Route path="/post/:id" exact component={PostDetail} />
