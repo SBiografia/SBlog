@@ -47,6 +47,8 @@ textarea {
 }
 
 .my_category {
+  width: auto;
+  padding-right: 0;
   &:last-child {
     margin-bottom: 0.25rem;
   }

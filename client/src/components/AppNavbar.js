@@ -98,7 +98,7 @@ const AppNavbar = () => {
     <Fragment>
       <Navbar color="dark" dark expand="lg" className="sticky-top">
         <Container>
-          <Link to="/" className="text-white text-decoration-none">
+          <Link to="/" className="fs-3 fw-bold text-white text-decoration-none">
             ㅅㅂㄹㄱ SBlog
           </Link>
           <NavbarToggler onClick={handleToggle} />

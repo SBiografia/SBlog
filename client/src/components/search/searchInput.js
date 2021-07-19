@@ -26,7 +26,7 @@ const SearchInput = () => {
   const resetValue = useRef(null);
   return (
     <Fragment>
-      <Form onSubmit={onSubmit} className="col mt-2">
+      <Form onSubmit={onSubmit} className="col mx-5 mt-2">
         <Input name="searchBy" onChange={onChange} innerRef={resetValue} />
       </Form>
     </Fragment>

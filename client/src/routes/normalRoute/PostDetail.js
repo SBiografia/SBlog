@@ -58,12 +58,12 @@ const PostDetail = (req) => {
   const EditButton = (
     <Fragment>
       <Row className="d-flex justify-content-center pb-3">
-        <Col className="col-md-3 me-md-3">
+        <Col className="col-md-3 me-md-3 d-flex justify-content-center">
           <Link to="/" className="btn btn-primary btn-block">
             Home
           </Link>
         </Col>
-        <Col className="col-md-3 me-md-3">
+        <Col className="col-md-3 me-md-3  d-flex justify-content-center">
           <Link
             to={`/post/${req.match.params.id}/edit`}
             className="btn btn-success btn-block"
@@ -71,7 +71,7 @@ const PostDetail = (req) => {
             Edit Post
           </Link>
         </Col>
-        <Col className="col-md-3">
+        <Col className="col-md-3  d-flex justify-content-center">
           <Button block className="btn-danger" onClick={onDeleteClick}>
             Delete
           </Button>
@@ -98,20 +98,48 @@ const PostDetail = (req) => {
     <>
       {userId === creatorId ? EditButton : HomeButton}
       <Row className="d-flex border-bottom border-top border-top border-primary p-3 mb-3 justify-content-between">
-        {/* <Row> */}
         {(() => {
           if (postDetail && postDetail.creator) {
             return (
               <Fragment>
-                <div className="font-weight-bold text-big">
+                <Row className="font-weight-bold text-big mb-2">
                   <span className="me-3">
                     <Button color="info">
                       {postDetail.category.categoryName}
                     </Button>
                   </span>
-                  {postDetail.title}
-                </div>
-                <div className="align-self-end">{postDetail.creator.name}</div>
+                </Row>
+
+                <Row>
+                  <Col className="col-9 fw-bold fs-2">
+                    <Row className="h-100">
+                      <Col className="h-100">
+                        <div>{postDetail.title}</div>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col className="col-3">
+                    <Row>
+                      <Col className="d-flex justify-content-end">
+                        <div>작성자 : {postDetail.creator.name}</div>
+                      </Col>
+                      <div className="w-100"></div>
+                      <Col className="d-flex justify-content-end align-items-baseline small">
+                        <FontAwesomeIcon icon={faPencilAlt} />
+                        &nbsp;
+                        <span> {postDetail.date}</span>
+                        &nbsp;&nbsp;
+                        <FontAwesomeIcon icon={faCommentDots} />
+                        &nbsp;
+                        <span> {postDetail.comments.length}</span>
+                        &nbsp;&nbsp;
+                        <FontAwesomeIcon icon={faMouse} />
+                        &nbsp;
+                        <span>{postDetail.views}</span>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
               </Fragment>
             );
           }
@@ -120,19 +148,6 @@ const PostDetail = (req) => {
 
       {postDetail && postDetail.comments ? (
         <Fragment>
-          <div className="d-flex justify-content-end align-items-baseline small">
-            <FontAwesomeIcon icon={faPencilAlt} />
-            &nbsp;
-            <span> {postDetail.date}</span>
-            &nbsp;&nbsp;
-            <FontAwesomeIcon icon={faCommentDots} />
-            &nbsp;
-            <span> {postDetail.comments.length}</span>
-            &nbsp;&nbsp;
-            <FontAwesomeIcon icon={faMouse} />
-            &nbsp;
-            <span>{postDetail.views}</span>
-          </div>
           <Row className="mb-3">
             <CKEditor
               editor={BallonEditor}
@@ -153,10 +168,10 @@ const PostDetail = (req) => {
                           </div>
                           <div className="text-small">
                             {/* //아래 내용은 날짜는 굵게, 시간은 얇게 설정해주기 위한 부분임 */}
-                            <span className="font-weight-bold">
+                            <span className="fw-bold">
                               {date.split(" ")[0]}
                             </span>
-                            <span className="font-weight-light">
+                            <span className="fw-light">
                               {" "}
                               {date.split(" ")[1]}
                             </span>
