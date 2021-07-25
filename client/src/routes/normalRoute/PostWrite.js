@@ -46,12 +46,16 @@ const PostWrite = () => {
     //https://hianna.tistory.com/423
     const regexSpace = /\s/gi;
     const regexSeperator = /\#/gi;
-    // console.log(body.category);
-    let cateArray = body.category
-      .replace(regexSpace, "")
-      .split(/(#[^\s#]+)/g)
-      .filter(Boolean);
+    let cateArray;
 
+    if (body.category === null || body.category === undefined) {
+      cateArray = ["미분류"];
+    } else {
+      cateArray = body.category
+        .replace(regexSpace, "")
+        .split(/(#[^\s#]+)/g)
+        .filter(Boolean);
+    }
     cateArray.forEach((item, index, arrSelf) => {
       item = item.replace(regexSeperator, "").replace(regexSpace, "");
       arrSelf[index] = item;

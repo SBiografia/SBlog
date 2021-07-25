@@ -29,12 +29,18 @@ const PostEdit = () => {
 
   // console.log(postDetail);
   let beforeCategoryString = "";
-  const beforeCategoryArray = postDetail.category;
-  for (let item of postDetail.category) {
-    beforeCategoryString = beforeCategoryString + "#" + item.categoryName + " ";
+  if (
+    postDetail.category.length === 1 &&
+    postDetail.category[0].categoryName === "미분류"
+  ) {
+    beforeCategoryString = "";
+  } else {
+    for (let item of postDetail.category) {
+      beforeCategoryString =
+        beforeCategoryString + "#" + item.categoryName + " ";
+    }
+    // console.log("edit->beforeCategoryString:", beforeCategoryString);
   }
-  // console.log("edit->beforeCategoryString:", beforeCategoryString);
-
   const onChange = (e) => {
     // console.log(form);
     // console.log(e.target, e.target.name, e.target.value);
@@ -54,12 +60,26 @@ const PostEdit = () => {
 
     const regexSpace = /\s/gi;
     const regexSeperator = /\#/gi;
-    // console.log(body.category);
-    let cateArray = body.category
-      .replace(regexSpace, "")
-      .split(/(#[^\s#]+)/g)
-      .filter(Boolean);
-
+    let cateArray;
+    console.log(body.category);
+    if (
+      body.category === null ||
+      body.category === undefined ||
+      body.category === "" ||
+      body.category.length === 0
+    ) {
+      cateArray = ["미분류"];
+    } else if (
+      body.category.length === 1 &&
+      body.category[0].categoryName === "미분류"
+    ) {
+      cateArray = ["미분류"];
+    } else {
+      cateArray = body.category
+        .replace(regexSpace, "")
+        .split(/(#[^\s#]+)/g)
+        .filter(Boolean);
+    }
     cateArray.forEach((item, index, arrSelf) => {
       item = item.replace(regexSeperator, "").replace(regexSpace, "");
       arrSelf[index] = item;
