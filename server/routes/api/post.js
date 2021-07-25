@@ -366,8 +366,8 @@ router.post("/:id/edit", auth, async (req, res, next) => {
     //Category와 User 모델 입장에서는 만들어지는 포스트의 id를 배열에 넣어야 하니 $push가 쓰이는 것이고,($push는 기존 배열에 값을 넣는 것이고)
     //Post 모델입장에서는 1개의 포스트 모델에서 Category 값을 찾았으니, 이를 업데이트만 해주면 되기에 $push가 사용되지 않는 것입니다.
 
-    if (beforeCategoryArray.length !== 0) {
-      for (let item of beforeCategoryArray) {
+    if (beforeCateArr !== null && beforeCateArr.length !== 0) {
+      for (let item of beforeCateArr) {
         //before에 남아있는 친구들한테서 post_id 빼준다.
         // //변경하는 category가 기존과 다를 경우, 기존cateogry ID에 들어있는 post배열을 빼준다.
         await Post.findByIdAndUpdate(
@@ -386,7 +386,7 @@ router.post("/:id/edit", auth, async (req, res, next) => {
         }
       }
     }
-    if (newCateArr.length !== 0) {
+    if (newCateArr !== null && newCateArr.length !== 0) {
       for (let item of newCateArr) {
         //새로 만들어준 친구들한테는 post_id 추가해준다.
         await Post.findByIdAndUpdate(modified_post._id, {
