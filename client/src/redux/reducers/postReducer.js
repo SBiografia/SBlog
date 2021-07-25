@@ -111,6 +111,7 @@ export default function (state = initialState, action) {
         loading: true,
       };
     case POST_UPLOADING_SUCCESS:
+      console.log("POSTReducer->UPload", action.payload);
       return {
         ...state,
         posts: action.payload,
@@ -139,6 +140,7 @@ export default function (state = initialState, action) {
         postDetail: action.payload,
         creatorId: action.payload.creator._id,
         title: action.payload.title,
+        category: action.payload.category,
       };
     case POST_DETAIL_LOADING_FAILURE:
       return {
@@ -197,6 +199,7 @@ export default function (state = initialState, action) {
         loading: true,
       };
     case CATEGORY_FIND_SUCCESS:
+      console.log(action.payload);
       return {
         ...state,
         categoryFindResult: action.payload,

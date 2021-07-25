@@ -25,8 +25,12 @@ const PostWrite = () => {
   const dispatch = useDispatch();
 
   const onChange = (e) => {
-    // console.log(form);
-    // console.log(e.target.value);
+    // let cateArray = []
+    // if (e.target.name === "category") {
+    //   console.log(e.target.name, ":", e.target.value);
+    //   console.log(e.target.value.split(/(#[^\s#]+)/g));
+    //   cateArray = e.target.value.split(/(#[^\s#]+)/g)
+    // }
     setValues({
       ...form,
       [e.target.name]: e.target.value,
@@ -38,6 +42,27 @@ const PostWrite = () => {
     const { title, contents, fileUrl, category } = form;
     const token = localStorage.getItem("token");
     const body = { title, contents, fileUrl, category, token };
+
+    //https://hianna.tistory.com/423
+    const regexSpace = /\s/gi;
+    const regexSeperator = /\#/gi;
+    // console.log(body.category);
+    let cateArray = body.category
+      .replace(regexSpace, "")
+      .split(/(#[^\s#]+)/g)
+      .filter(Boolean);
+
+    cateArray.forEach((item, index, arrSelf) => {
+      item = item.replace(regexSeperator, "").replace(regexSpace, "");
+      arrSelf[index] = item;
+    });
+
+    body.category = cateArray.filter(Boolean);
+    // console.log("******************************************");
+    // console.log("cateArray", typeof cateArray, body.category);
+    // console.log("******************************************");
+    // // console.log(body);
+
     dispatch({
       type: POST_UPLOADING_REQUEST,
       payload: body,
@@ -45,10 +70,7 @@ const PostWrite = () => {
   };
 
   const getDataFromCKEditor = (event, editor) => {
-    console.log("editor_getDataFromCKEditor");
-    // console.log("editor", editor);
     const data = editor.getData();
-    console.log(data);
 
     if (data && data.match("<img src=")) {
       const whereImg_start = data.indexOf("<img src=");

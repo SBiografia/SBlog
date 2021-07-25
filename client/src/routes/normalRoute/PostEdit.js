@@ -26,25 +26,21 @@ const PostEdit = () => {
   });
   const { postDetail } = useSelector((state) => state.post);
   const dispatch = useDispatch();
+
   // console.log(postDetail);
+  let beforeCategoryString = "";
+  const beforeCategoryArray = postDetail.category;
+  for (let item of postDetail.category) {
+    beforeCategoryString = beforeCategoryString + "#" + item.categoryName + " ";
+  }
+  // console.log("edit->beforeCategoryString:", beforeCategoryString);
+
   const onChange = (e) => {
     // console.log(form);
     // console.log(e.target, e.target.name, e.target.value);
     setValues({
       ...form,
       [e.target.name]: e.target.value,
-    });
-  };
-
-  const onChangeCategory = (e) => {
-    // console.log(form);
-    // console.log(e.target, e.target.name, e.target.value);
-    setValues({
-      ...form,
-      category: {
-        categoryName: e.target.value,
-        _id: form.category._id,
-      },
     });
   };
 
@@ -55,7 +51,23 @@ const PostEdit = () => {
     const token = localStorage.getItem("token");
     const id = postDetail._id;
     const body = { title, contents, fileUrl, category, token, id };
-    // console.log(body);
+
+    const regexSpace = /\s/gi;
+    const regexSeperator = /\#/gi;
+    // console.log(body.category);
+    let cateArray = body.category
+      .replace(regexSpace, "")
+      .split(/(#[^\s#]+)/g)
+      .filter(Boolean);
+
+    cateArray.forEach((item, index, arrSelf) => {
+      item = item.replace(regexSeperator, "").replace(regexSpace, "");
+      arrSelf[index] = item;
+    });
+
+    body.category = cateArray.filter(Boolean);
+    console.log(body);
+
     dispatch({
       type: POST_EDIT_UPLOADING_REQUEST,
       payload: body,
@@ -64,7 +76,7 @@ const PostEdit = () => {
 
   //postDetail의 속성값들이 달라진다면 저장을 하라는 useEffect
   useEffect(() => {
-    console.log(postDetail);
+    // console.log(postDetail);
     setValues({
       title: postDetail.title,
       contents: postDetail.contents,
@@ -142,12 +154,13 @@ const PostEdit = () => {
           <FormGroup className="mb-3">
             <Label for="category">Category</Label>
             <Input
-              defaultValue={postDetail.category.categoryName}
+              // defaultValue={postDetail.category.categoryName}
+              defaultValue={beforeCategoryString}
               type="text"
               name="category"
               id="category"
               className="form-control"
-              onChange={onChangeCategory}
+              onChange={onChange}
             />
           </FormGroup>
           <FormGroup className="mb-3">

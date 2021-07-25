@@ -1,10 +1,10 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { Button, Badge } from "reactstrap";
-const Category = ({ post }) => {
+const Category = ({ post, type }) => {
   // console.log(post);
   return (
-    <>
+    <Fragment>
       {Array.isArray(post)
         ? post.map(({ _id, categoryName, post }) => (
             <div key={_id} className="ms-1 mt-1 my_category">
@@ -14,14 +14,19 @@ const Category = ({ post }) => {
               >
                 <span className="ms-1">
                   <Button color="info">
-                    {categoryName} <Badge color="light">{post.length}</Badge>
+                    {categoryName}
+                    {type === "list" ? (
+                      <Badge color="light">{post.length}</Badge>
+                    ) : (
+                      ""
+                    )}
                   </Button>
                 </span>
               </Link>
             </div>
           ))
         : ""}
-    </>
+    </Fragment>
   );
 };
 export default Category;

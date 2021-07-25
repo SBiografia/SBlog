@@ -75,11 +75,10 @@ const uploadPostAPI = (payload) => {
 };
 
 function* uploadPost(action) {
-  console.log("postSaga.js/uploadPost Start");
   try {
     const result = yield call(uploadPostAPI, action.payload);
-    console.log(result, "uploadPost => result");
-    console.log(action, "uploadPost => action");
+    // console.log(action.payload, "uploadPost => action"); //postWrite에서 작성한 body 글 내용
+
     yield put({
       type: POST_UPLOADING_SUCCESS,
       payload: result.data,
@@ -149,6 +148,7 @@ const deletePostAPI = (payload) => {
 function* deletePost(action) {
   try {
     const result = yield call(deletePostAPI, action.payload);
+    // console.log(action.payload);
     console.log("delete Post 1", result);
     yield put({
       type: POST_DELETE_SUCCESS,
@@ -257,7 +257,8 @@ function* categoryFind(action) {
   try {
     // console.log("postSaga:categoryFind start");
     const result = yield call(categoryFindAPI, action.payload);
-    // console.log("postSaga:categoryFind", result);
+    // console.log(action.payload); //action.payload = categoryName
+    console.log("postSaga:categoryFind", result);
     yield put({
       type: CATEGORY_FIND_SUCCESS,
       payload: result.data,

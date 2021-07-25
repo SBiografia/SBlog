@@ -75,6 +75,10 @@ router.post("/image", uploadS3.array("upload", 5), async (req, res, next) => {
 //  @access   public
 router.get("/skip/:skip", async (req, res) => {
   try {
+    // test용으로 작성한 post 전체 삭제 메시지.
+    // await Post.deleteMany({});
+    // await Category.deleteMany({});
+
     const postCount = await Post.countDocuments();
     console.log(req.params);
     //sort({date:-1}) : -1을 하면 최신부터 하게 됨.
@@ -98,9 +102,7 @@ router.get("/skip/:skip", async (req, res) => {
 // @access    Private
 
 router.post("/", auth, uploadS3.none(), async (req, res, next) => {
-  console.log("start POST api/post");
   try {
-    // console.log(req, "req");
     const { title, contents, fileUrl, creator, category } = req.body;
     const newPost = await Post.create({
       title,
@@ -109,45 +111,49 @@ router.post("/", auth, uploadS3.none(), async (req, res, next) => {
       creator: req.user.id,
       date: moment().format("YYYY-MM-DD hh:mm:ss"),
     });
-    const findResult = await Category.findOne({
-      categoryName: category,
-    });
-
-    console.log("post.js => findResult =>", findResult);
-
     //$push는 기존 배열에 값을 넣는 것이고, 또한 현재 해당 구문은 1개의 포스트의 값을 작성중임을 기억하시면 됩니다.
     //else 이후 구문은 카테고리 찾는 값이 있을때를 의미합니다.
     //하지만 $push를 왜 안쓰냐고 하셨죠? $push는 javascript 문법과 비슷하게 기존 배열에 값을 추가해서 넣을때를 의미합니다. 그래서
     //Category와 User 모델 입장에서는 만들어지는 포스트의 id를 배열에 넣어야 하니 $push가 쓰이는 것이고,
     //Post 모델입장에서는 1개의 포스트 모델에서 Category 값을 찾았으니, 이를 업데이트만 해주면 되기에 $push가 사용되지 않는 것입니다.
-    // if (isNullOrUndefined(findResult)) {
-    if (findResult === null || findResult === undefined) {
-      console.log("findResult is null or undefined");
-      const newCategory = await Category.create({
-        categoryName: category,
-      });
-      await Post.findByIdAndUpdate(newPost._id, {
-        $push: { category: newCategory._id },
-      });
-      await Category.findByIdAndUpdate(newCategory._id, {
-        $push: { post: newPost._id },
-      });
-      await User.findByIdAndUpdate(req.user.id, {
-        $push: { post: newPost._id },
-      });
-    } else {
-      await Category.findByIdAndUpdate(findResult._id, {
-        $push: { post: newPost._id },
-      });
-      await Post.findByIdAndUpdate(newPost._id, {
-        category: findResult._id,
-      });
-      await User.findByIdAndUpdate(req.user.id, {
-        $push: { post: newPost._id },
-      });
-    }
+
+    // await category.forEach(async (item) => {
+    await (async () => {
+      for (let item of category) {
+        const findResultId = await Category.findOne({
+          categoryName: item,
+        });
+
+        if (findResultId === null || findResultId === undefined) {
+          console.log("findResultId is null or undefined");
+          const newCategory = await Category.create({
+            categoryName: item,
+          });
+          await Post.findByIdAndUpdate(newPost._id, {
+            $push: { category: newCategory._id },
+          });
+          await Category.findByIdAndUpdate(newCategory._id, {
+            $push: { post: newPost._id },
+          });
+          await User.findByIdAndUpdate(req.user.id, {
+            $push: { post: newPost._id },
+          });
+        } else {
+          console.log("findResultId is exist");
+          await Category.findByIdAndUpdate(findResultId._id, {
+            $push: { post: newPost._id },
+          });
+          await Post.findByIdAndUpdate(newPost._id, {
+            $push: { category: findResultId },
+          });
+          await User.findByIdAndUpdate(req.user.id, {
+            $push: { post: newPost._id },
+          });
+        }
+      }
+    })();
+
     return res.redirect(`/api/post/${newPost._id}`);
-    // res.json(newPost);
   } catch (e) {
     console.log(e);
   }
@@ -158,7 +164,8 @@ router.post("/", auth, uploadS3.none(), async (req, res, next) => {
 // @access      Public
 router.get("/:id", async (req, res, next) => {
   try {
-    // console.log("server/routes/post.js/Detail Post");
+    console.log("****************************************");
+    console.log("server/routes/post.js/Detail Post");
     const post = await Post.findById(req.params.id)
       .populate("creator", "name")
       .populate({ path: "category", select: "categoryName" });
@@ -229,6 +236,7 @@ router.post("/:id/comments", async (req, res, next) => {
 // @access      Private
 
 router.delete("/:id", auth, async (req, res) => {
+  console.log("***delete post:", req.params);
   await Post.deleteMany({ _id: req.params.id });
   await Comment.deleteMany({ post: req.params.id });
   await User.findByIdAndUpdate(req.user.id, {
@@ -240,15 +248,25 @@ router.delete("/:id", auth, async (req, res) => {
       comments: { post_id: req.params.id },
     },
   });
-  const CategoryUpdateResult = await Category.findOneAndUpdate(
-    { post: req.params.id },
-    { $pull: { post: req.params.id } },
-    { new: true }
-  ); //new 옵션을 적어줘야 업데이트가 된다고 mogoose docs에 나와있음
+  const findResultCategoryArr = await Category.find({ post: req.params.id });
+  // console.log("delete -> cateArr:", findResultCategoryArr);
 
-  if (CategoryUpdateResult.post.length === 0) {
-    await Category.deleteMany({ _id: CategoryUpdateResult });
-  }
+  await (async () => {
+    for (let item of findResultCategoryArr) {
+      const categoryUpdateResult = await Category.findByIdAndUpdate(
+        item._id,
+        { $pull: { post: req.params.id } },
+        { new: true }
+      );
+      console.log("categoryUpdateResult:", categoryUpdateResult);
+
+      if (categoryUpdateResult.post.length === 0) {
+        // console.log("delete->cate is empty");
+        await Category.deleteMany({ _id: categoryUpdateResult });
+      }
+    }
+  })();
+
   return res.json({ success: true });
 });
 
@@ -270,72 +288,69 @@ router.post("/:id/edit", auth, async (req, res, next) => {
     //아래는 req.body.title 이랑 같은 의미인데 깔끔하게 구조분해해서 가져와줌
     body: { title, contents, fileUrl, category, id },
   } = req;
-  // console.log(req);
 
+  let beforeCateArr = await Category.find({
+    //req.params.id 를 가진 Category objectId를 찾는다.
+    post: req.params.id,
+  });
+  let newCateArr = [];
+  let resultCateArr = [];
+  console.log("edit/category:", category);
+  console.log("edit/beforeCateArr_before:", beforeCateArr);
   try {
     //새로 만든 category 이름이 기존 Category 중에 있는지 먼저 찾은 다음에 없으면 새로 만들어주고, 있으면 기존꺼를 쓰면 됨
+    await (async () => {
+      for (let item of category) {
+        let checkBefore = false;
+        let befoCategory;
+        //beforeArr에 item이 있는지 없는지
+        for (let befoItem of beforeCateArr) {
+          checkBefore = befoItem.categoryName === item ? true : false;
 
-    const findResult_afterCateName = await Category.findOne({
-      //Edit 된 categoryName과 동일한 Category를 objectId를 찾는다.
-      categoryName: category.categoryName,
-    });
+          if (checkBefore === true) {
+            befoCategory = befoItem;
 
-    const findResult_befoCateId = await Category.findOne({
-      //req.params.id 를 가진 Category objectId를 찾는다.
-      post: req.params.id,
-    });
+            break;
+          }
+        }
 
-    const checkConsoleLog = 0;
-    //checkConsoleLog = 1 을 입력하면 비교하기 위해 나열했던 콘솔로그들 순서 확인 가능
-    if (checkConsoleLog) {
-      console.log(req.body.category);
-      console.log(category);
-      console.log(findResult_afterCateName);
-      console.log(findResult_befoCateId);
-      if (findResult_afterCateName._id === category._id) {
-        console.log("동일함1");
-      } else if (findResult_afterCateName._id === req.body.category._id) {
-        console.log("동일함2");
-      } else if (findResult_afterCateName === req.body.category) {
-        console.log("동일함3");
-      } else if (findResult_befoCateId === findResult_afterCateName) {
-        console.log("동일함4");
-      } else if (findResult_befoCateId.equals(findResult_afterCateName)) {
-        console.log("동일함5");
-      } else {
-        console.log("다름5");
+        if (checkBefore) {
+          //있다면 resultCateArr에 넣어주고, beforeArr에서 제외하기
+          resultCateArr.push(befoCategory);
+          const idxCate = beforeCateArr.findIndex((temp) => {
+            {
+              return temp.categoryName === befoCategory.categoryName;
+            }
+          });
+          if (idxCate > -1) {
+            beforeCateArr.splice(idxCate, 1);
+          }
+        } else {
+          //없다면 기존 Category DB에 있는지 체크해서
+          const findResult = await Category.findOne({
+            categoryName: item,
+          });
+          let newCategory;
+          console.log("edit/findResult:", findResult);
+          if (findResult === null || findResult === undefined) {
+            console.log("기존 CateDB에 없음");
+            //없다면 새로 만들어서 resultCateArr에 넣어주기.
+            newCategory = await Category.create({
+              categoryName: item,
+            });
+          } else {
+            console.log("기존 CateDB에 있음.");
+            //있다면 그거를 가져와서 resultCateArr에 넣어주기.
+            newCategory = findResult;
+          }
+          newCateArr.push(newCategory);
+          resultCateArr.push(newCategory);
+        }
       }
-    }
-
-    let newCategory = null;
-
-    if (findResult_befoCateId.equals(findResult_afterCateName)) {
-      //변경한 category가 기존과 동일하다면
-      newCategory = category;
-    } else {
-      //변경한 category가 기존 Category중에 없다면 새로 만들어준다.
-      if (
-        findResult_afterCateName === null ||
-        findResult_afterCateName === undefined
-      ) {
-        newCategory = await Category.create({
-          categoryName: category.categoryName,
-        });
-      } else {
-        newCategory = findResult_afterCateName;
-      }
-
-      //변경하는 category가 기존과 다를 경우, 기존cateogry ID에 들어있는 post배열을 빼준다.
-      const CategoryUpdateResult = await Category.findOneAndUpdate(
-        { post: req.params.id },
-        { $pull: { post: req.params.id } },
-        { new: true }
-      ); //new 옵션을 적어줘야 업데이트가 된다고 mogoose docs에 나와있음
-      //기존 배열에서 빼줬는데 길이가 0이면 기존 category리스트 삭제해준다.
-      if (CategoryUpdateResult.post.length === 0) {
-        await Category.deleteMany({ _id: CategoryUpdateResult });
-      }
-    }
+    })();
+    // console.log("edit/finish befoCateArr:", beforeCateArr);
+    // console.log("edit/finish newCateArr:", newCateArr);
+    // console.log("edit/finish resultCateArr:", resultCateArr);
 
     const modified_post = await Post.findByIdAndUpdate(
       id,
@@ -343,25 +358,51 @@ router.post("/:id/edit", auth, async (req, res, next) => {
         title,
         contents,
         fileUrl,
-        category: newCategory,
         date: moment().format("YYYY-MM-DD hh:mm:ss"),
       }, //findByIdAndUpdate를 할 때는 new:true 를 해줘야 함!
       { new: true }
     );
-    console.log("server/edit/modified_post:", modified_post);
 
     //Category와 User 모델 입장에서는 만들어지는 포스트의 id를 배열에 넣어야 하니 $push가 쓰이는 것이고,($push는 기존 배열에 값을 넣는 것이고)
     //Post 모델입장에서는 1개의 포스트 모델에서 Category 값을 찾았으니, 이를 업데이트만 해주면 되기에 $push가 사용되지 않는 것입니다.
-    await Post.findByIdAndUpdate(modified_post._id, {
-      category: modified_post.category._id,
-    });
-    await Category.findByIdAndUpdate(modified_post.category._id, {
-      $push: { post: modified_post._id },
-    });
+
+    if (beforeCategoryArray.length !== 0) {
+      for (let item of beforeCategoryArray) {
+        //before에 남아있는 친구들한테서 post_id 빼준다.
+        // //변경하는 category가 기존과 다를 경우, 기존cateogry ID에 들어있는 post배열을 빼준다.
+        await Post.findByIdAndUpdate(
+          modified_post._id,
+          { $pull: { category: item._id } },
+          { new: true }
+        );
+        const CategoryUpdateResult = await Category.findOneAndUpdate(
+          { categoryName: item.categoryName },
+          { $pull: { post: req.params.id } },
+          { new: true }
+        ); //new 옵션을 적어줘야 업데이트가 된다고 mogoose docs에 나와있음
+        //기존 배열에서 빼줬는데 길이가 0이면 기존 category리스트 삭제해준다.
+        if (CategoryUpdateResult.post.length === 0) {
+          await Category.deleteMany({ _id: CategoryUpdateResult });
+        }
+      }
+    }
+    if (newCateArr.length !== 0) {
+      for (let item of newCateArr) {
+        //새로 만들어준 친구들한테는 post_id 추가해준다.
+        await Post.findByIdAndUpdate(modified_post._id, {
+          $push: { category: item._id },
+        });
+        await Category.findByIdAndUpdate(item._id, {
+          $push: { post: modified_post._id },
+        });
+      }
+    }
+
     await User.findByIdAndUpdate(req.user.id, {
       $push: { post: modified_post._id },
     });
 
+    console.log("server/edit/modified_post:", modified_post);
     res.redirect(`/api/post/${modified_post.id}`);
   } catch (e) {
     console.log(e);
@@ -371,6 +412,12 @@ router.post("/:id/edit", auth, async (req, res, next) => {
 
 router.get("/category/:categoryName", async (req, res, next) => {
   try {
+    console.log(
+      "************************************************************************************"
+    );
+    console.log("CATEGORY search/req");
+    console.log("req.params", req.params);
+
     const result = await Category.findOne(
       {
         categoryName: {
@@ -380,8 +427,8 @@ router.get("/category/:categoryName", async (req, res, next) => {
       },
       "post"
     ).populate({ path: "post" });
-
-    console.log(result, "Category Find Result");
+    console.log("result is");
+    console.log(result);
     res.send(result);
   } catch (e) {
     console.log(e);

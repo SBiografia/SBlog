@@ -159,7 +159,7 @@ const PostCardList = () => {
     <Fragment>
       <Helmet title="Home" />
       <Row className="border-bottom border-top border-primary py-2 mb-3">
-        <Category post={categoryFindResult} />
+        <Category post={categoryFindResult} type="list" />
       </Row>
       <Row>{post ? <PostCardOne post={post} /> : GrowingSpinner}</Row>
       {infiniteScrollOption ? getPostByInfinite : getPostByButton}

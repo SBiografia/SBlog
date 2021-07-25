@@ -23,10 +23,17 @@ const PostSchema = new mongoose.Schema({
     type: String,
     default: moment().format("YYYY-MM-DD hh:mm:ss"),
   },
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "category",
-  },
+  //카테고리 리스트화
+  // category: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "category",
+  // },
+  category: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "category",
+    },
+  ],
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,

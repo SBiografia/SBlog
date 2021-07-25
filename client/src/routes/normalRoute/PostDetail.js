@@ -19,6 +19,7 @@ import {
 import BallonEditor from "@ckeditor/ckeditor5-editor-balloon/src/ballooneditor";
 import { editorConfiguration } from "../../components/editor/EditorConfig";
 import Comments from "../../components/comments/Comments";
+import Category from "../../components/post/Category";
 
 const PostDetail = (req) => {
   const dispatch = useDispatch();
@@ -28,8 +29,8 @@ const PostDetail = (req) => {
   const { userId, userName } = useSelector((state) => state.auth);
   //{comments}는 commentReducer의 initialState 안에 변수명으로 해준다.
   const { comments } = useSelector((state) => state.comment);
-
-  //console.log(req);
+  // console.log(postDetail);
+  // console.log(req.match.params);
 
   useEffect(() => {
     dispatch({
@@ -103,11 +104,12 @@ const PostDetail = (req) => {
             return (
               <Fragment>
                 <Row className="font-weight-bold text-big mb-2">
-                  <span className="me-3">
+                  <Category post={postDetail.category} type="detail" />
+                  {/* <span className="me-3">
                     <Button color="info">
                       {postDetail.category.categoryName}
                     </Button>
-                  </span>
+                  </span> */}
                 </Row>
 
                 <Row>
