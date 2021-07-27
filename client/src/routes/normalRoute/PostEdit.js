@@ -17,6 +17,7 @@ import Myinit from "../../components/editor/UploadAdapter";
 import { POST_EDIT_UPLOADING_REQUEST } from "../../redux/types";
 
 const PostEdit = () => {
+  console.log("helloDD");
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [form, setValues] = useState({
     title: "",
@@ -26,7 +27,7 @@ const PostEdit = () => {
   });
   const { postDetail } = useSelector((state) => state.post);
   const dispatch = useDispatch();
-
+  console.log(postDetail.category);
   let beforeCategoryString = "";
   if (
     postDetail.category.length === 1 &&
@@ -49,15 +50,24 @@ const PostEdit = () => {
   const onSubmit = async (e) => {
     await e.preventDefault();
     //강의에서는 category 수정은 안한다고 지웠는데 나는 냅뒀음.
+    console.log(form);
     const { title, contents, fileUrl, category } = form;
     const token = localStorage.getItem("token");
     const id = postDetail._id;
     const body = { title, contents, fileUrl, category, token, id };
-
+    console.log(body.category);
     const regexSpace = /\s/gi;
     // const regexSeperator = /\#/gi;
     const regexSeperator = /#/gi;
     let cateArray;
+
+    if (Array.isArray(body.category)) {
+      let tempCategory = "";
+      for (let item of body.category) {
+        tempCategory = tempCategory + "#" + item.categoryName + " ";
+      }
+      body.category = tempCategory;
+    }
 
     if (
       body.category === null ||
