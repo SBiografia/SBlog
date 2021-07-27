@@ -5,6 +5,7 @@ import hpp from "hpp";
 import helmet from "helmet";
 import cors from "cors";
 import morgan from "morgan";
+import path from "path";
 
 //Routes
 import postRoutes from "./routes/api/post";
@@ -14,6 +15,7 @@ import searchRoutes from "./routes/api/search";
 
 const app = express();
 const { MONGO_URI } = config;
+const prod = process.env.NODE_ENV === "production";
 
 app.use(hpp());
 app.use(helmet());
@@ -49,5 +51,17 @@ app.use("/api/post", postRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/login", loginRoutes);
 app.use("/api/search", searchRoutes);
+
+//서버쪽에는 주소가 다 api가 붙는데, front는 api가 빠진 주소임
+//프론트에서 서버를 접근할 때는 api가 붙으니까 위에 route들이 실행되는데,
+//일반 유저가 접근할 때는 api가 없는 주소이니 위에 코드들이 실행이 안되고, 아래에 있는 코드가 실행 됨.
+//즉, 위에 있는 api로 실행되는 주소 외에 "*" 모든 주소들은 아래 주소들로 실행이 됨. client/build/index.html
+
+if (prod) {
+  app.use(express.static(path.join(__dirname, "../client/build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+  });
+}
 
 export default app;

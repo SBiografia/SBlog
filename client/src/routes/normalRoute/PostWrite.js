@@ -39,7 +39,8 @@ const PostWrite = () => {
 
     //https://hianna.tistory.com/423
     const regexSpace = /\s/gi;
-    const regexSeperator = /\#/gi;
+    // const regexSeperator = /\#/gi;
+    const regexSeperator = /#/gi;
     let cateArray;
 
     if (

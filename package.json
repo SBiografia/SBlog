@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./server/server.js --exec babel-node --ignore './client'"
+    "dev": "nodemon ./server/server.js --exec babel-node --ignore './client'",
+    "prebuild": "cd client && npm run build",
+    "build": "babel server --out-dir build",
+    "build:server": "babel server --out-dir build"
   },
   "repository": {
     "type": "git",
@@ -18,7 +21,7 @@
   },
   "homepage": "https://github.com/SBiografia/SBlog#readme",
   "dependencies": {
-    "aws-sdk": "^2.932.0",
+    "aws-sdk": "^2.954.0",
     "babel-node": "0.0.1-security",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -30,19 +33,19 @@
     "hpp": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
-    "mongoose": "^5.12.14",
+    "mongoose": "^5.13.3",
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
     "path": "^0.12.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.5",
-    "@babel/core": "^7.14.6",
-    "@babel/node": "^7.14.5",
+    "@babel/core": "^7.14.8",
+    "@babel/node": "^7.14.7",
     "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.14.5",
-    "babel-loader": "^8.1.0",
+    "@babel/preset-env": "^7.14.8",
+    "babel-loader": "^8.2.2",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.12"
   }
 }

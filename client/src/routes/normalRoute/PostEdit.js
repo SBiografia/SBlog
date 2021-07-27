@@ -55,7 +55,8 @@ const PostEdit = () => {
     const body = { title, contents, fileUrl, category, token, id };
 
     const regexSpace = /\s/gi;
-    const regexSeperator = /\#/gi;
+    // const regexSeperator = /\#/gi;
+    const regexSeperator = /#/gi;
     let cateArray;
 
     if (
