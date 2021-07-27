@@ -15,6 +15,8 @@ var _user = _interopRequireDefault(require("../../models/user"));
 
 var _comment = _interopRequireDefault(require("../../models/comment"));
 
+require("@babel/polyfill");
+
 var _auth = _interopRequireDefault(require("../../middleware/auth"));
 
 var _moment = _interopRequireDefault(require("moment"));
