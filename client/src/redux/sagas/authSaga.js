@@ -24,7 +24,6 @@ import {
 
 //LOGIN
 const loginUserAPI = (loginData) => {
-  console.log(loginData, "loginData");
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -36,7 +35,7 @@ const loginUserAPI = (loginData) => {
 function* loginUser(loginAction) {
   try {
     const result = yield call(loginUserAPI, loginAction.payload);
-    // console.log(result);
+
     yield put({
       type: LOGIN_SUCCESS,
       payload: result.data,
@@ -73,7 +72,6 @@ function* watchlogout() {
 
 //USER Loading
 const userLoadingAPI = (token) => {
-  // console.log("client/redux/sagas/authSaga.js => userLoadingAPI =>", token);
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -87,13 +85,8 @@ const userLoadingAPI = (token) => {
 
 function* userLoading(action) {
   try {
-    // console.log("client/redux/sagas/authSaga.js => userLoading => action",  action  );
     const result = yield call(userLoadingAPI, action.payload);
-    console.log(
-      "client/redux/sagas/authSaga.js => userLoading => result",
-      result.data.role,
-      result
-    );
+
     yield put({
       type: USER_LOADING_SUCCESS,
       payload: result.data,
@@ -112,7 +105,6 @@ function* watchuserLoading() {
 
 //REGISTER
 const registerUserAPI = (req) => {
-  console.log(req, "req");
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -124,7 +116,7 @@ const registerUserAPI = (req) => {
 function* registerUser(loginAction) {
   try {
     const result = yield call(registerUserAPI, loginAction.payload);
-    console.log("RegisterUser Data", result);
+
     yield put({
       type: REGISTER_SUCCESS,
       payload: result.data,

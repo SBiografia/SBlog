@@ -25,12 +25,6 @@ const PostWrite = () => {
   const dispatch = useDispatch();
 
   const onChange = (e) => {
-    // let cateArray = []
-    // if (e.target.name === "category") {
-    //   console.log(e.target.name, ":", e.target.value);
-    //   console.log(e.target.value.split(/(#[^\s#]+)/g));
-    //   cateArray = e.target.value.split(/(#[^\s#]+)/g)
-    // }
     setValues({
       ...form,
       [e.target.name]: e.target.value,
@@ -48,7 +42,12 @@ const PostWrite = () => {
     const regexSeperator = /\#/gi;
     let cateArray;
 
-    if (body.category === null || body.category === undefined) {
+    if (
+      body.category === null ||
+      body.category === undefined ||
+      body.category === "" ||
+      body.category.length === 0
+    ) {
       cateArray = ["미분류"];
     } else {
       cateArray = body.category
@@ -62,10 +61,6 @@ const PostWrite = () => {
     });
 
     body.category = cateArray.filter(Boolean);
-    // console.log("******************************************");
-    // console.log("cateArray", typeof cateArray, body.category);
-    // console.log("******************************************");
-    // // console.log(body);
 
     dispatch({
       type: POST_UPLOADING_REQUEST,
@@ -78,7 +73,7 @@ const PostWrite = () => {
 
     if (data && data.match("<img src=")) {
       const whereImg_start = data.indexOf("<img src=");
-      console.log(whereImg_start);
+
       let whereImg_end = "";
       let ext_name_find = "";
       let result_Img_Url = "";
@@ -86,20 +81,17 @@ const PostWrite = () => {
 
       for (let i = 0; i < ext_name.length; i++) {
         if (data.match(ext_name[i])) {
-          console.log(data.indexOf(`${ext_name[i]}`));
           ext_name_find = ext_name[i];
           whereImg_end = data.indexOf(`${ext_name[i]}`);
         }
       }
-      console.log(ext_name_find);
-      console.log(whereImg_end);
 
       if (ext_name_find === "jpeg") {
         result_Img_Url = data.substring(whereImg_start + 10, whereImg_end + 4);
       } else {
         result_Img_Url = data.substring(whereImg_start + 10, whereImg_end + 3);
       }
-      console.log(result_Img_Url, "result_Img_Url");
+
       setValues({
         ...form,
         fileUrl: result_Img_Url,

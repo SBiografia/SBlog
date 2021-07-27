@@ -40,7 +40,7 @@ const loadPostAPI = (payload) => {
 function* loadPosts(action) {
   try {
     const result = yield call(loadPostAPI, action.payload);
-    // console.log(result, "loadPosts");
+
     yield put({
       type: POST_LOADING_SUCCESS,
       payload: result.data,
@@ -77,7 +77,6 @@ const uploadPostAPI = (payload) => {
 function* uploadPost(action) {
   try {
     const result = yield call(uploadPostAPI, action.payload);
-    // console.log(action.payload, "uploadPost => action"); //postWrite에서 작성한 body 글 내용
 
     yield put({
       type: POST_UPLOADING_SUCCESS,
@@ -94,23 +93,20 @@ function* uploadPost(action) {
 }
 
 function* watchUploadPost() {
-  // console.log("postSaga.js/watchUploadPost Start");
   yield takeEvery(POST_UPLOADING_REQUEST, uploadPost);
 }
 
 //Post Detail
 const loadPostDetailAPI = (payload) => {
   //Post Detail을 가져올때는 토큰이 필요 없음. 일반적인 사람들도 내용을 볼 수 있어야 하므로.
-  // console.log(payload);
+
   return axios.get(`/api/post/${payload}`);
 };
 
 function* loadPostDetail(action) {
-  // console.log("postSaga.js/loadPostDetail Start");
   try {
     const result = yield call(loadPostDetailAPI, action.payload);
-    // console.log(result, "loadPostDetail => result");
-    // console.log(action, "loadPostDetail => action");
+
     yield put({
       type: POST_DETAIL_LOADING_SUCCESS,
       payload: result.data,
@@ -126,7 +122,6 @@ function* loadPostDetail(action) {
 }
 
 function* watchLoadPostDetail() {
-  // console.log("postSaga.js/watchLoadPostDetail Start");
   yield takeEvery(POST_DETAIL_LOADING_REQUEST, loadPostDetail);
 }
 
@@ -148,13 +143,12 @@ const deletePostAPI = (payload) => {
 function* deletePost(action) {
   try {
     const result = yield call(deletePostAPI, action.payload);
-    // console.log(action.payload);
-    console.log("delete Post 1", result);
+
     yield put({
       type: POST_DELETE_SUCCESS,
       payload: result.data,
     });
-    console.log("delete Post 2");
+
     yield put(push("/"));
   } catch (e) {
     console.log("delete error", e);
@@ -166,7 +160,6 @@ function* deletePost(action) {
 }
 
 function* watchDeletePost() {
-  // console.log("postSaga.js/watchdeletePost Start");
   yield takeEvery(POST_DELETE_REQUEST, deletePost);
 }
 
@@ -207,7 +200,6 @@ function* watchPostEditLoad() {
 
 //Post EDIT UPLOAD
 const postEditUploadAPI = (payload) => {
-  console.log(payload);
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -217,16 +209,15 @@ const postEditUploadAPI = (payload) => {
   if (token) {
     config.headers["x-auth-token"] = token;
   }
-  // console.log(config);
+
   //const token = payload.token 인데 payload가 앞에 있어야 token값을 가져올 수 있음
   return axios.post(`/api/post/${payload.id}/edit`, payload, config);
 };
 
 function* postEditUpload(action) {
   try {
-    // console.log(action);
     const result = yield call(postEditUploadAPI, action.payload);
-    // console.log("postSaga/PostEditUpload start", result);
+
     yield put({
       type: POST_EDIT_UPLOADING_SUCCESS,
       payload: result.data,
@@ -243,7 +234,6 @@ function* postEditUpload(action) {
 }
 
 function* watchPostEditUpload() {
-  // console.log("start watch post edit upload");
   yield takeEvery(POST_EDIT_UPLOADING_REQUEST, postEditUpload);
 }
 
@@ -255,9 +245,8 @@ const categoryFindAPI = (payload) => {
 
 function* categoryFind(action) {
   try {
-    // console.log("postSaga:categoryFind start");
     const result = yield call(categoryFindAPI, action.payload);
-    // console.log(action.payload); //action.payload = categoryName
+
     console.log("postSaga:categoryFind", result);
     yield put({
       type: CATEGORY_FIND_SUCCESS,

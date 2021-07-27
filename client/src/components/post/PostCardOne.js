@@ -17,14 +17,10 @@ import { faMouse } from "@fortawesome/free-solid-svg-icons";
 //Link to 로 Router.js 에서 만들어준 postDetail로 넘어가게 할꺼임
 //text-truncate : 텍스트가 표시영역 넘어가면 ...으로 표시
 const PostCardOne = ({ post }) => {
-  // console.log("PostCardOne : post:", post);
   return (
     <Fragment>
       {Array.isArray(post)
         ? post.map(({ _id, title, fileUrl, comments, views }) => {
-            // {
-            //   console.log("PostCardOne/return", _id, title, comments);
-            // }
             return (
               <div key={_id} className="col-md-4">
                 <Link

@@ -9,7 +9,6 @@ const Search = () => {
   const dispatch = useDispatch();
   let { searchTerm } = useParams();
   const { searchResult } = useSelector((state) => state.post);
-  console.log(searchResult);
 
   useEffect(() => {
     if (searchTerm) {

@@ -15,15 +15,13 @@ import {
 //Load Comment
 ///////////////
 const loadCommentsAPI = (payload) => {
-  // console.log("loadCommentsAPI ID", payload);
   return axios.get(`/api/post/${payload}/comments`);
 };
 
 function* loadComments(action) {
   try {
-    // console.log("loadComments : start");
     const result = yield call(loadCommentsAPI, action.payload);
-    // console.log("loadComments: resut is", result);
+
     yield put({
       type: COMMENT_LOADING_SUCCESS,
       payload: result.data,
@@ -39,7 +37,6 @@ function* loadComments(action) {
 }
 
 function* watchLoadComments() {
-  // console.log("watchLoadComments : start");
   yield takeEvery(COMMENT_LOADING_REQUEST, loadComments);
 }
 
@@ -47,17 +44,13 @@ function* watchLoadComments() {
 //Upload Comment
 ///////////////
 const uploadCommentsAPI = (payload) => {
-  // console.log("uploadCommentsAPI payload is", payload);
-  // console.log("uploadCommentsAPI ID:", payload.id);
   return axios.post(`/api/post/${payload.id}/comments`, payload);
 };
 
 function* uploadComments(action) {
   try {
-    // console.log("commentSaga/uploadComments : start");
-    // console.log("commentSaga/uploadComments : action?:", action);
     const result = yield call(uploadCommentsAPI, action.payload);
-    // console.log("uploadComment", result);
+
     yield put({
       type: COMMENT_UPLOADING_SUCCESS,
       payload: result.data,
@@ -73,7 +66,6 @@ function* uploadComments(action) {
 }
 
 function* watchUploadComments() {
-  // console.log("commentSaga/watchUploadComments : start");
   yield takeEvery(COMMENT_UPLOADING_REQUEST, uploadComments);
 }
 

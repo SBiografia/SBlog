@@ -47,10 +47,6 @@ const uploadS3 = multer({
 //아래 라우터는 Post 작성 시 이미지를 업로드하면 Editor에 보여주는 역할로서의 라우터. 최종적으로 제출하면 등록되는 것은 나중에 다시?(36강 중)
 router.post("/image", uploadS3.array("upload", 5), async (req, res, next) => {
   try {
-    console.log(
-      "server/api/post.js => ",
-      req.files.map((v) => v.location)
-    );
     res.json({ uploaded: true, url: req.files.map((v) => v.location) });
     console.log(res);
   } catch (e) {
@@ -66,7 +62,6 @@ router.post("/image", uploadS3.array("upload", 5), async (req, res, next) => {
 //   const postFindResult = await Post.find();
 //   const categoryFindResult = await Category.find();
 //   const result = { postFindResult, categoryFindResult };
-//   // console.log(postFindResult, "All Post Get");
 //   res.json(result);
 // });
 
@@ -80,7 +75,7 @@ router.get("/skip/:skip", async (req, res) => {
     // await Category.deleteMany({});
 
     const postCount = await Post.countDocuments();
-    console.log(req.params);
+
     //sort({date:-1}) : -1을 하면 최신부터 하게 됨.
     const postFindResult = await Post.find()
       .skip(Number(req.params.skip))
@@ -88,8 +83,7 @@ router.get("/skip/:skip", async (req, res) => {
       .sort({ date: -1 });
     const categoryFindResult = await Category.find();
     const result = { postFindResult, categoryFindResult, postCount };
-    console.log(postCount);
-    // console.log(postFindResult, "All Post Get");
+
     res.json(result);
   } catch (e) {
     console.log(e);
@@ -125,7 +119,6 @@ router.post("/", auth, uploadS3.none(), async (req, res, next) => {
         });
 
         if (findResultId === null || findResultId === undefined) {
-          console.log("findResultId is null or undefined");
           const newCategory = await Category.create({
             categoryName: item,
           });
@@ -139,7 +132,6 @@ router.post("/", auth, uploadS3.none(), async (req, res, next) => {
             $push: { post: newPost._id },
           });
         } else {
-          console.log("findResultId is exist");
           await Category.findByIdAndUpdate(findResultId._id, {
             $push: { post: newPost._id },
           });
@@ -164,14 +156,12 @@ router.post("/", auth, uploadS3.none(), async (req, res, next) => {
 // @access      Public
 router.get("/:id", async (req, res, next) => {
   try {
-    console.log("****************************************");
-    console.log("server/routes/post.js/Detail Post");
     const post = await Post.findById(req.params.id)
       .populate("creator", "name")
       .populate({ path: "category", select: "categoryName" });
     post.views += 1;
     post.save();
-    // console.log(post);
+
     res.json(post);
   } catch (e) {
     console.error(e);
@@ -192,7 +182,7 @@ router.get("/:id/comments", async (req, res) => {
       path: "comments",
     });
     const result = comment.comments;
-    // console.log("comment log", result);
+
     res.json(result);
   } catch (e) {
     console.log(e);
@@ -207,7 +197,7 @@ router.post("/:id/comments", async (req, res, next) => {
     post: req.body.id,
     date: moment().format("YYYY-MM-DD hh:mm:ss"),
   });
-  console.log("newComment : ", newComment);
+
   try {
     await Post.findByIdAndUpdate(req.body.id, {
       $push: {
@@ -236,7 +226,6 @@ router.post("/:id/comments", async (req, res, next) => {
 // @access      Private
 
 router.delete("/:id", auth, async (req, res) => {
-  console.log("***delete post:", req.params);
   await Post.deleteMany({ _id: req.params.id });
   await Comment.deleteMany({ post: req.params.id });
   await User.findByIdAndUpdate(req.user.id, {
@@ -249,7 +238,6 @@ router.delete("/:id", auth, async (req, res) => {
     },
   });
   const findResultCategoryArr = await Category.find({ post: req.params.id });
-  // console.log("delete -> cateArr:", findResultCategoryArr);
 
   await (async () => {
     for (let item of findResultCategoryArr) {
@@ -258,10 +246,8 @@ router.delete("/:id", auth, async (req, res) => {
         { $pull: { post: req.params.id } },
         { new: true }
       );
-      console.log("categoryUpdateResult:", categoryUpdateResult);
 
       if (categoryUpdateResult.post.length === 0) {
-        // console.log("delete->cate is empty");
         await Category.deleteMany({ _id: categoryUpdateResult });
       }
     }
@@ -295,8 +281,7 @@ router.post("/:id/edit", auth, async (req, res, next) => {
   });
   let newCateArr = [];
   let resultCateArr = [];
-  console.log("edit/category:", category);
-  console.log("edit/beforeCateArr_before:", beforeCateArr);
+
   try {
     //새로 만든 category 이름이 기존 Category 중에 있는지 먼저 찾은 다음에 없으면 새로 만들어주고, 있으면 기존꺼를 쓰면 됨
     await (async () => {
@@ -331,15 +316,13 @@ router.post("/:id/edit", auth, async (req, res, next) => {
             categoryName: item,
           });
           let newCategory;
-          console.log("edit/findResult:", findResult);
+
           if (findResult === null || findResult === undefined) {
-            console.log("기존 CateDB에 없음");
             //없다면 새로 만들어서 resultCateArr에 넣어주기.
             newCategory = await Category.create({
               categoryName: item,
             });
           } else {
-            console.log("기존 CateDB에 있음.");
             //있다면 그거를 가져와서 resultCateArr에 넣어주기.
             newCategory = findResult;
           }
@@ -348,9 +331,6 @@ router.post("/:id/edit", auth, async (req, res, next) => {
         }
       }
     })();
-    // console.log("edit/finish befoCateArr:", beforeCateArr);
-    // console.log("edit/finish newCateArr:", newCateArr);
-    // console.log("edit/finish resultCateArr:", resultCateArr);
 
     const modified_post = await Post.findByIdAndUpdate(
       id,
@@ -402,7 +382,6 @@ router.post("/:id/edit", auth, async (req, res, next) => {
       $push: { post: modified_post._id },
     });
 
-    console.log("server/edit/modified_post:", modified_post);
     res.redirect(`/api/post/${modified_post.id}`);
   } catch (e) {
     console.log(e);
@@ -412,12 +391,6 @@ router.post("/:id/edit", auth, async (req, res, next) => {
 
 router.get("/category/:categoryName", async (req, res, next) => {
   try {
-    console.log(
-      "************************************************************************************"
-    );
-    console.log("CATEGORY search/req");
-    console.log("req.params", req.params);
-
     const result = await Category.findOne(
       {
         categoryName: {
@@ -427,8 +400,7 @@ router.get("/category/:categoryName", async (req, res, next) => {
       },
       "post"
     ).populate({ path: "post" });
-    console.log("result is");
-    console.log(result);
+
     res.send(result);
   } catch (e) {
     console.log(e);

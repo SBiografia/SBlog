@@ -19,8 +19,6 @@ const PostCardList = () => {
   //option (TRUE)= infinite Scroll, option(FALSE) = button
   const infiniteScrollOption = true;
 
-  // console.log("dispatch", dispatch);
-  // console.log(post);
   useEffect(() => {
     dispatch({ type: POST_LOADING_REQUEST_FIRST, payload: 0 });
   }, [dispatch]);

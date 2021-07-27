@@ -50,7 +50,6 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case POST_LOADING_REQUEST_FIRST:
-      console.log(state);
       return {
         //초기값 얕은 복사
         ...state,
@@ -59,7 +58,6 @@ export default function (state = initialState, action) {
         loading: true,
       };
     case POST_LOADING_REQUEST:
-      console.log(state);
       return {
         //초기값 얕은 복사
         ...state,
@@ -80,7 +78,6 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case POST_LOADING_FAILURE:
-      console.log("POST_LOADING_FAILURE");
       return {
         //초기값 얕은 복사
         ...state,
@@ -111,7 +108,6 @@ export default function (state = initialState, action) {
         loading: true,
       };
     case POST_UPLOADING_SUCCESS:
-      console.log("POSTReducer->UPload", action.payload);
       return {
         ...state,
         posts: action.payload,
@@ -132,8 +128,6 @@ export default function (state = initialState, action) {
         loading: true,
       };
     case POST_DETAIL_LOADING_SUCCESS:
-      // console.log("postReducer/switch/POST_DETAIL_LOADING_SUCCESS");
-      // console.log("action", action);
       return {
         ...state,
         loading: false,
@@ -199,7 +193,6 @@ export default function (state = initialState, action) {
         loading: true,
       };
     case CATEGORY_FIND_SUCCESS:
-      console.log(action.payload);
       return {
         ...state,
         categoryFindResult: action.payload,

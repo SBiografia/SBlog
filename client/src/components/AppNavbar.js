@@ -21,7 +21,7 @@ const AppNavbar = () => {
   const { isAuthenticated, user, userRole } = useSelector(
     (state) => state.auth
   );
-  // console.log("UserROle => ", userRole);
+
   const dispatch = useDispatch();
   const onLogout = useCallback(() => {
     dispatch({

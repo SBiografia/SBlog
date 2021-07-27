@@ -35,7 +35,6 @@ router.get("/", async (req, res) => {
 // @access    public
 
 router.post("/", (req, res) => {
-  console.log(req, "req");
   const { name, email, password } = req.body;
 
   //Simple validation
@@ -87,7 +86,7 @@ router.post("/", (req, res) => {
 router.post("/:userName/profile", async (req, res) => {
   try {
     const { password, previousPassword, rePassword, userId } = req.body;
-    console.log(req.body, "userName Profile");
+
     const result = await User.findById(userId, "password");
     bcrypt.compare(previousPassword, result.password).then((isMatch) => {
       if (!isMatch) {

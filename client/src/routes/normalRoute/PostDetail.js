@@ -29,8 +29,6 @@ const PostDetail = (req) => {
   const { userId, userName } = useSelector((state) => state.auth);
   //{comments}는 commentReducer의 initialState 안에 변수명으로 해준다.
   const { comments } = useSelector((state) => state.comment);
-  // console.log(postDetail);
-  // console.log(req.match.params);
 
   useEffect(() => {
     dispatch({
@@ -93,7 +91,6 @@ const PostDetail = (req) => {
       </Row>
     </Fragment>
   );
-  // console.log(title);
 
   const body = (
     <>

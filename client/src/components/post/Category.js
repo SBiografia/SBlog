@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { Button, Badge } from "reactstrap";
 const Category = ({ post, type }) => {
-  // console.log(post);
   return (
     <Fragment>
       {Array.isArray(post)
