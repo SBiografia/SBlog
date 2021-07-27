@@ -5,6 +5,7 @@ import Post from "../../models/post";
 import Category from "../../models/category";
 import User from "../../models/user";
 import Comment from "../../models/comment";
+import "@babel/polyfill";
 import auth from "../../middleware/auth";
 import moment from "moment";
 import { isNullOrUndefined } from "util";
