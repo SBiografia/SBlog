@@ -429,6 +429,7 @@ module.exports = function (webpackEnv) {
                     },
                   ],
                   ["transform-remove-console", { exclude: ["error", "warn"] }],
+                  ["@babel/plugin-transform-runtime"],
                   isEnvDevelopment &&
                     shouldUseReactRefresh &&
                     require.resolve("react-refresh/babel"),
