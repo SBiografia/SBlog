@@ -36,7 +36,9 @@ var app = (0, _express["default"])();
 var MONGO_URI = _config["default"].MONGO_URI;
 var prod = process.env.NODE_ENV === "production";
 app.use((0, _hpp["default"])());
-app.use((0, _helmet["default"])()); //cors는 브라우저가 다른 도메인이나 포트가 다른 서버에 자원을 요청하는 것
+app.use((0, _helmet["default"])({
+  contentSecurityPolicy: false
+})); //cors는 브라우저가 다른 도메인이나 포트가 다른 서버에 자원을 요청하는 것
 //보통 SPA에서는 react, vue나 같은 SPA에서는 서버에서 설정을 해주는데
 //origin이라 함은 허락하고자 하는 주소를 말하는데, true를 적으면 모두 허용해주게 됨
 //credentials 는 지금 설정한 cors를 브라우저의 헤더에 추가하게 됨

@@ -18,7 +18,11 @@ const { MONGO_URI } = config;
 const prod = process.env.NODE_ENV === "production";
 
 app.use(hpp());
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 
 //cors는 브라우저가 다른 도메인이나 포트가 다른 서버에 자원을 요청하는 것
 //보통 SPA에서는 react, vue나 같은 SPA에서는 서버에서 설정을 해주는데
