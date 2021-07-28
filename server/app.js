@@ -46,7 +46,7 @@ app.use(
         imgSrc: [
           "'self'",
           "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
-
+          "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload",
           "data:",
         ],
       },
