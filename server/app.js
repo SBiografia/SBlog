@@ -38,12 +38,7 @@ app.use(
         defaultSrc: ["'self'", "'unsafe-inline'"],
         scriptSrc: ["'self'", "'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:"],
-        connectSrc: ["'self'"],
-        fontSrc: ["'self'"],
-        objectSrc: ["'self'"],
-        mediaSrc: ["'self'"],
-        frameSrc: ["'self'"],
+        connectSrc: ["'self'", "'unsafe-inline'"],
       },
     },
   })
