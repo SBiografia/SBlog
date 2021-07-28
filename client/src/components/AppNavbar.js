@@ -15,6 +15,8 @@ import { LOGOUT_REQUEST } from "../redux/types";
 import { useDispatch, useSelector } from "react-redux";
 import RegisterModal from "./auth/RegisterModal";
 import SearchInput from "./search/searchInput";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 const AppNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -101,7 +103,11 @@ const AppNavbar = () => {
           <Link to="/" className="fs-3 fw-bold text-white text-decoration-none">
             ㅅㅂㄹㄱ SBlog
           </Link>
-          <NavbarToggler onClick={handleToggle} />
+          <NavbarToggler onClick={handleToggle}>
+            <span>
+              <FontAwesomeIcon icon={faBars} />
+            </span>
+          </NavbarToggler>
           <Collapse isOpen={isOpen} navbar>
             <SearchInput isOpen={isOpen} />
             {/* collapse 기능 이용해서 true/false일 때 인증값을 기준으로 접속자 권한을 표시해줌. */}
