@@ -45,8 +45,10 @@ app.use(
         connectSrc: ["'self'", "'unsafe-inline'"],
         imgSrc: [
           "'self'",
+          "'unsafe-inline'",
           "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
           "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload",
+          "data:image/svg+xml",
           "data:*",
         ],
       },
