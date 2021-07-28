@@ -34,28 +34,32 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 //Routes
 var app = (0, _express["default"])();
 var MONGO_URI = _config["default"].MONGO_URI;
-var prod = process.env.NODE_ENV === "production"; // contentSecurityPolicy: {
-// directives: {
-//   defaultSrc: [
-//     "'self'",
-//     "'unsafe-inline'",
-//     "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
-//   ],
-//   scriptSrc: ["'self'", "'unsafe-inline'"],
-//   styleSrc: ["'self'", "'unsafe-inline'"],
-//   connectSrc: ["'self'", "'unsafe-inline'"],
-//   imgSrc: [
-//     "'self'",
-//     "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
-//     "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload",
-//     "data:*",
-//   ],
-// },
+var prod = process.env.NODE_ENV === "production"; // contentSecurityPolicy: false,
+// {
+//   directives: {
+//     defaultSrc: ["'self'"],
+//     scriptSrc: ["'self'"],
+//     styleSrc: ["'self'", "'unsafe-inline'"],
+//     imgSrc: ["'self'", "data:"],
+//     connectSrc: ["'self'"],
+//     fontSrc: ["'self'"],
+//     objectSrc: ["'self'"],
+//     mediaSrc: ["'self'"],
+//     frameSrc: ["'self'"],
+//   },
 // }
 
 app.use((0, _hpp["default"])());
 app.use((0, _helmet["default"])({
-  contentSecurityPolicy: false
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'", "'unsafe-inline'", "‘unsafe-eval'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      connectSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "‘unsafe-eval'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload", "data:*"]
+    }
+  }
 })); //cors는 브라우저가 다른 도메인이나 포트가 다른 서버에 자원을 요청하는 것
 //보통 SPA에서는 react, vue나 같은 SPA에서는 서버에서 설정을 해주는데
 //origin이라 함은 허락하고자 하는 주소를 말하는데, true를 적으면 모두 허용해주게 됨

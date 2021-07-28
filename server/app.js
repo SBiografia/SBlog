@@ -16,29 +16,43 @@ import searchRoutes from "./routes/api/search";
 const app = express();
 const { MONGO_URI } = config;
 const prod = process.env.NODE_ENV === "production";
-// contentSecurityPolicy: {
-// directives: {
-//   defaultSrc: [
-//     "'self'",
-//     "'unsafe-inline'",
-//     "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
-//   ],
-//   scriptSrc: ["'self'", "'unsafe-inline'"],
-//   styleSrc: ["'self'", "'unsafe-inline'"],
-//   connectSrc: ["'self'", "'unsafe-inline'"],
-//   imgSrc: [
-//     "'self'",
-//     "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
-//     "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload",
-//     "data:*",
-//   ],
-// },
+// contentSecurityPolicy: false,
+// {
+//   directives: {
+//     defaultSrc: ["'self'"],
+//     scriptSrc: ["'self'"],
+//     styleSrc: ["'self'", "'unsafe-inline'"],
+//     imgSrc: ["'self'", "data:"],
+//     connectSrc: ["'self'"],
+//     fontSrc: ["'self'"],
+//     objectSrc: ["'self'"],
+//     mediaSrc: ["'self'"],
+//     frameSrc: ["'self'"],
+//   },
 // }
-
 app.use(hpp());
 app.use(
   helmet({
-    contentSecurityPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "‘unsafe-eval'",
+          "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
+        ],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        connectSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: [
+          "'self'",
+          "‘unsafe-eval'",
+          "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
+          "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload",
+          "data:*",
+        ],
+      },
+    },
   })
 );
 
