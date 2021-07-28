@@ -35,7 +35,11 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ["'self'", "'unsafe-inline'"],
+        defaultSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
+        ],
         scriptSrc: ["'self'", "'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         connectSrc: ["'self'", "'unsafe-inline'"],
@@ -43,7 +47,7 @@ app.use(
           "'self'",
           "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
           "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload",
-          "data:",
+          "data:*",
         ],
       },
     },
