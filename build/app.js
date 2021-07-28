@@ -53,7 +53,7 @@ app.use((0, _hpp["default"])());
 app.use((0, _helmet["default"])({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'", "'unsafe-inline'", "‘unsafe-eval'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com"],
+      defaultSrc: ["'self'", "'unsafe-inline'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       connectSrc: ["'self'", "'unsafe-inline'"],
