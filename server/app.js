@@ -39,7 +39,11 @@ app.use(
         scriptSrc: ["'self'", "'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         connectSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:"],
+        imgSrc: [
+          "'self'",
+          "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
+          "data:",
+        ],
       },
     },
   })
