@@ -57,7 +57,7 @@ app.use((0, _helmet["default"])({
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       connectSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "data:"]
+      imgSrc: ["'self'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload", "data:"]
     }
   }
 })); //cors는 브라우저가 다른 도메인이나 포트가 다른 서버에 자원을 요청하는 것
