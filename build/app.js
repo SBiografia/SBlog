@@ -34,21 +34,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 //Routes
 var app = (0, _express["default"])();
 var MONGO_URI = _config["default"].MONGO_URI;
-var prod = process.env.NODE_ENV === "production"; // contentSecurityPolicy: false,
-// {
-//   directives: {
-//     defaultSrc: ["'self'"],
-//     scriptSrc: ["'self'"],
-//     styleSrc: ["'self'", "'unsafe-inline'"],
-//     imgSrc: ["'self'", "data:"],
-//     connectSrc: ["'self'"],
-//     fontSrc: ["'self'"],
-//     objectSrc: ["'self'"],
-//     mediaSrc: ["'self'"],
-//     frameSrc: ["'self'"],
-//   },
-// }
-
+var prod = process.env.NODE_ENV === "production";
 app.use((0, _hpp["default"])());
 app.use((0, _helmet["default"])({
   contentSecurityPolicy: {
@@ -58,8 +44,7 @@ app.use((0, _helmet["default"])({
       styleSrc: ["'self'", "'unsafe-inline'"],
       connectSrc: ["'unsafe-inline'", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208"],
       imgSrc: ["*", "'self'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208", "data:*"],
-      fontSrc: ["'self'", "https:"],
-      upgradeInsecureRequests: []
+      fontSrc: ["'self'", "https:"]
     }
   }
 })); //cors는 브라우저가 다른 도메인이나 포트가 다른 서버에 자원을 요청하는 것
