@@ -125,7 +125,6 @@
     ]
   },
   "proxy": "http://localhost:8080",
-  "homepage": "https://sbiografia.com",
   "browserslist": {
     "production": [
       ">0.2%",
