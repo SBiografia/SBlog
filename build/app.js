@@ -53,11 +53,12 @@ app.use((0, _hpp["default"])());
 app.use((0, _helmet["default"])({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'", "'unsafe-inline'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "http://blog.sbiografia.com", "https://blog.sbiografia.com", "http://www.sbiografia.com", "https://www.sbiografia.com", "http://13.124.207.208", "https://13.124.207.208"],
+      defaultSrc: ["'self'", "'unsafe-inline'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      connectSrc: ["'unsafe-inline'", "http://blog.sbiografia.com", "https://blog.sbiografia.com", "http://www.sbiografia.com", "https://www.sbiografia.com", "http://13.124.207.208", "https://13.124.207.208"],
-      imgSrc: ["*", "'self'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload", "http://blog.sbiografia.com", "https://blog.sbiografia.com", "http://www.sbiografia.com", "https://www.sbiografia.com", "http://13.124.207.208", "https://13.124.207.208", "data:*"],
+      connectSrc: ["'unsafe-inline'", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208"],
+      imgSrc: ["*", "'self'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208", "data:*"],
+      fontSrc: ["'self'", "https:"],
       upgradeInsecureRequests: []
     }
   }
