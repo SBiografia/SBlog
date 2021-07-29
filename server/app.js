@@ -39,15 +39,33 @@ app.use(
           "'self'",
           "'unsafe-inline'",
           "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
+          "http://blog.sbiografia.com",
+          "https://blog.sbiografia.com",
+          "http://www.sbiografia.com",
+          "https://www.sbiografia.com",
+          "http://13.124.207.208",
         ],
         scriptSrc: ["'self'", "'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
-        connectSrc: ["'self'", "'unsafe-inline'"],
+        connectSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "http://blog.sbiografia.com",
+          "https://blog.sbiografia.com",
+          "http://www.sbiografia.com",
+          "https://www.sbiografia.com",
+          "http://13.124.207.208",
+        ],
         imgSrc: [
           "*",
           "'self'",
           "https://sblog2021.s3.ap-northeast-2.amazonaws.com",
           "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload",
+          "http://blog.sbiografia.com",
+          "https://blog.sbiografia.com",
+          "http://www.sbiografia.com",
+          "https://www.sbiografia.com",
+          "http://13.124.207.208",
           "data:*",
         ],
       },
@@ -80,6 +98,18 @@ mongoose
   .catch((e) => {
     console.log(e);
   });
+
+//USE ROUTES
+//http로 들어오는 https로 변경하는 라우트
+// app.all("*", (req, res, next) => {
+//   let protocol = req.headers["x-forward-proto"] || req.protocol;
+//   if (protocol === "https") {
+//     next();
+//   } else {
+//     let to = `https://${req.hostname}${req.url}`;
+//     res.redirect(to);
+//   }
+// });
 
 //Use routes
 app.use("/api/post", postRoutes);
