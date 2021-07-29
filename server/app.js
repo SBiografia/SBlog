@@ -48,7 +48,6 @@ app.use(
         scriptSrc: ["'self'", "'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         connectSrc: [
-          "'self'",
           "'unsafe-inline'",
           "http://blog.sbiografia.com",
           "https://blog.sbiografia.com",

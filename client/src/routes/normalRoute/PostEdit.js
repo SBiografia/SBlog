@@ -148,8 +148,8 @@ const PostEdit = () => {
     } else {
       setValues({
         ...form,
-        // fileUrl: "https://source.unsplash.com/random/301x201",
-        fileUrl: process.env.REACT_APP_BASIC_IMAGE_URL,
+        fileUrl: "https://source.unsplash.com/random/301x201",
+        // fileUrl: process.env.REACT_APP_BASIC_IMAGE_URL,
         contents: data,
       });
     }
