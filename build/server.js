@@ -16,7 +16,7 @@ _greenlockExpress["default"].init({
   //packageRoot란, 현재 프로젝트의 가장 바깥 경로 루트. '/Users/sb/ㅇㅅㅂ/WEB/MERN_blog/sblog/'
   //__dirname : 현재 파일의 경로
   packageRoot: _path["default"].join(__dirname, "../"),
-  configDir: _path["default"].joing(__dirname, "../", "server/config/greenlock.d"),
+  configDir: _path["default"].join(__dirname, "../", "server/config/greenlock.d"),
   maintainerEmail: "test1@gmail.com",
   cluster: false
 }).serve(_app["default"], function () {

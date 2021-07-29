@@ -11,7 +11,7 @@ greenlock
     //packageRoot란, 현재 프로젝트의 가장 바깥 경로 루트. '/Users/sb/ㅇㅅㅂ/WEB/MERN_blog/sblog/'
     //__dirname : 현재 파일의 경로
     packageRoot: path.join(__dirname, "../"),
-    configDir: path.joing(__dirname, "../", "server/config/greenlock.d"),
+    configDir: path.join(__dirname, "../", "server/config/greenlock.d"),
     maintainerEmail: "test1@gmail.com",
     cluster: false,
   })
