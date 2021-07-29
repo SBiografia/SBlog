@@ -39,11 +39,11 @@ app.use((0, _hpp["default"])());
 app.use((0, _helmet["default"])({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'", "'unsafe-inline'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208"],
+      defaultSrc: ["'self'", "'unsafe-inline'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "http://sbiografia.com", "http://*.sbiografia.com", "http://13.124.207.208"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      connectSrc: ["'unsafe-inline'", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208"],
-      imgSrc: ["*", "'self'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208", "data:*"],
+      connectSrc: ["'unsafe-inline'", "http://sbiografia.com", "http://*.sbiografia.com", "http://13.124.207.208"],
+      imgSrc: ["*", "'self'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload", "http://sbiografia.com", "http://*.sbiografia.com", "http://13.124.207.208", "data:*"],
       fontSrc: ["'self'", "https:"]
     }
   }
@@ -52,22 +52,23 @@ app.use((0, _helmet["default"])({
 //origin이라 함은 허락하고자 하는 주소를 말하는데, true를 적으면 모두 허용해주게 됨
 //credentials 는 지금 설정한 cors를 브라우저의 헤더에 추가하게 됨
 //아래 코드는 greenlock(https) 해주기 전의 코드
-// app.use(cors({ origin: true, credentials: true }));
-//greenlock 적용 이후 코드
 
-if (prod) {
-  app.use((0, _cors["default"])({
-    origin: ["https://sbiografia.com", /\.sbiografia\.com$/],
-    credentials: true
-  }));
-} else {
-  app.use((0, _morgan["default"])("dev"));
-  app.use((0, _cors["default"])({
-    origin: true,
-    credentials: true
-  }));
-} //morgan은 개발할 때 log를 볼 수 있게 해주는 것
-
+app.use((0, _cors["default"])({
+  origin: true,
+  credentials: true
+})); //greenlock 적용 이후 코드
+// if (prod) {
+//   app.use(
+//     cors({
+//       origin: ["https://sbiografia.com", /\.sbiografia\.com$/],
+//       credentials: true,
+//     })
+//   );
+// } else {
+//   app.use(morgan("dev"));
+//   app.use(cors({ origin: true, credentials: true }));
+// }
+//morgan은 개발할 때 log를 볼 수 있게 해주는 것
 
 app.use((0, _morgan["default"])("dev"));
 app.use(_express["default"].json());

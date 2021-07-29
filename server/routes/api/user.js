@@ -25,6 +25,7 @@ router.get("/", async (req, res) => {
   } catch (e) {
     console.log(e);
     //실패코드 400
+    console.log("no users");
     res.status(400).json({ msg: e.message });
   }
 });
