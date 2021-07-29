@@ -70,6 +70,7 @@ app.use(
           "https://13.124.207.208",
           "data:*",
         ],
+        upgradeInsecureRequests: [],
       },
     },
   })
