@@ -14,5 +14,15 @@
     "serverKeyType": "RSA-2048",
     "subscriberEmail": "test1@gmail.com"
   },
-  "sites": []
+  "sites": [
+    {
+      "subject": "sbiografia.com",
+      "altnames": [
+        "sbiografia.com",
+        "www.sbiografia.com",
+        "blog.sbiografia.com"
+      ],
+      "renewAt": 1
+    }
+  ]
 }
