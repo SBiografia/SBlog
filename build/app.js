@@ -87,18 +87,17 @@ _mongoose["default"].connect(MONGO_URI, {
   console.log(e);
 }); //USE ROUTES
 //http로 들어오는 https로 변경하는 라우트
+// app.all("*", (req, res, next) => {
+//   let protocol = req.headers["x-forward-proto"] || req.protocol;
+//   if (protocol === "https") {
+//     next();
+//   } else {
+//     let to = `https://${req.hostname}${req.url}`;
+//     res.redirect(to);
+//   }
+// });
+//Use routes
 
-
-app.all("*", function (req, res, next) {
-  var protocol = req.headers["x-forward-proto"] || req.protocol;
-
-  if (protocol === "https") {
-    next();
-  } else {
-    var to = "https://".concat(req.hostname).concat(req.url);
-    res.redirect(to);
-  }
-}); //Use routes
 
 app.use("/api/post", _post["default"]);
 app.use("/api/user", _user["default"]);

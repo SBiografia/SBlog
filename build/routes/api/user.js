@@ -52,7 +52,7 @@ router.get("/", /*#__PURE__*/function () {
           case 6:
             //성공코드 200
             res.status(200).json(users);
-            _context.next = 13;
+            _context.next = 14;
             break;
 
           case 9:
@@ -60,11 +60,12 @@ router.get("/", /*#__PURE__*/function () {
             _context.t0 = _context["catch"](0);
             console.log(_context.t0); //실패코드 400
 
+            console.log("no users");
             res.status(400).json({
               msg: _context.t0.message
             });
 
-          case 13:
+          case 14:
           case "end":
             return _context.stop();
         }
