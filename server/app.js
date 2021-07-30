@@ -37,6 +37,9 @@ app.use(
           "http://sbiografia.com",
           "http://*.sbiografia.com",
           "http://13.124.207.208",
+          "https://sbiografia.com",
+          "https://*.sbiografia.com",
+          "https://13.124.207.208",
         ],
         imgSrc: [
           "*",
