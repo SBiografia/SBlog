@@ -52,23 +52,22 @@ app.use((0, _helmet["default"])({
 //origin이라 함은 허락하고자 하는 주소를 말하는데, true를 적으면 모두 허용해주게 됨
 //credentials 는 지금 설정한 cors를 브라우저의 헤더에 추가하게 됨
 //아래 코드는 greenlock(https) 해주기 전의 코드
+// app.use(cors({ origin: true, credentials: true }));
+//greenlock 적용 이후 코드
 
-app.use((0, _cors["default"])({
-  origin: true,
-  credentials: true
-})); //greenlock 적용 이후 코드
-// if (prod) {
-//   app.use(
-//     cors({
-//       origin: ["https://sbiografia.com", /\.sbiografia\.com$/],
-//       credentials: true,
-//     })
-//   );
-// } else {
-//   app.use(morgan("dev"));
-//   app.use(cors({ origin: true, credentials: true }));
-// }
-//morgan은 개발할 때 log를 볼 수 있게 해주는 것
+if (prod) {
+  app.use((0, _cors["default"])({
+    origin: ["https://sbiografia.com", /\.sbiografia\.com$/],
+    credentials: true
+  }));
+} else {
+  app.use((0, _morgan["default"])("dev"));
+  app.use((0, _cors["default"])({
+    origin: true,
+    credentials: true
+  }));
+} //morgan은 개발할 때 log를 볼 수 있게 해주는 것
+
 
 app.use((0, _morgan["default"])("dev"));
 app.use(_express["default"].json());
@@ -87,17 +86,18 @@ _mongoose["default"].connect(MONGO_URI, {
   console.log(e);
 }); //USE ROUTES
 //http로 들어오는 https로 변경하는 라우트
-// app.all("*", (req, res, next) => {
-//   let protocol = req.headers["x-forward-proto"] || req.protocol;
-//   if (protocol === "https") {
-//     next();
-//   } else {
-//     let to = `https://${req.hostname}${req.url}`;
-//     res.redirect(to);
-//   }
-// });
-//Use routes
 
+
+app.all("*", function (req, res, next) {
+  var protocol = req.headers["x-forward-proto"] || req.protocol;
+
+  if (protocol === "https") {
+    next();
+  } else {
+    var to = "https://".concat(req.hostname).concat(req.url);
+    res.redirect(to);
+  }
+}); //Use routes
 
 app.use("/api/post", _post["default"]);
 app.use("/api/user", _user["default"]);
