@@ -29,9 +29,6 @@ app.use(
           "http://sbiografia.com",
           "http://*.sbiografia.com",
           "http://13.124.207.208",
-          "https://sbiografia.com",
-          "https://*.sbiografia.com",
-          "https://13.124.207.208",
         ],
         scriptSrc: ["'self'", "'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
@@ -57,7 +54,7 @@ app.use(
           "https://13.124.207.208",
           "data:*",
         ],
-        fontSrc: ["'self'", "https:"],
+        fontSrc: ["'self'", "http:"],
       },
     },
   })

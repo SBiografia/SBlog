@@ -39,12 +39,12 @@ app.use((0, _hpp["default"])());
 app.use((0, _helmet["default"])({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'", "'unsafe-inline'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "http://sbiografia.com", "http://*.sbiografia.com", "http://13.124.207.208", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208"],
+      defaultSrc: ["'self'", "'unsafe-inline'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "http://sbiografia.com", "http://*.sbiografia.com", "http://13.124.207.208"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       connectSrc: ["'unsafe-inline'", "http://sbiografia.com", "http://*.sbiografia.com", "http://13.124.207.208", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208"],
       imgSrc: ["*", "'self'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload", "http://sbiografia.com", "http://*.sbiografia.com", "http://13.124.207.208", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208", "data:*"],
-      fontSrc: ["'self'", "https:"]
+      fontSrc: ["'self'", "http:"]
     }
   }
 })); //cors는 브라우저가 다른 도메인이나 포트가 다른 서버에 자원을 요청하는 것
