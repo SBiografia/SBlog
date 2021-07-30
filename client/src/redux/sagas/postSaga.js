@@ -40,7 +40,7 @@ const loadPostAPI = (payload) => {
 function* loadPosts(action) {
   try {
     const result = yield call(loadPostAPI, action.payload);
-
+    console.log("saga/loadPosts");
     yield put({
       type: POST_LOADING_SUCCESS,
       payload: result.data,

@@ -12,6 +12,7 @@ import Category from "../../components/post/Category";
 
 let prevInterSectingRect = 0;
 const PostCardList = () => {
+  console.log("start postcardlist");
   const { post, categoryFindResult, loading, postCount } = useSelector(
     (state) => state.post
   );

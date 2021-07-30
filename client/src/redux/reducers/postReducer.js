@@ -50,6 +50,7 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case POST_LOADING_REQUEST_FIRST:
+      console.log("start LOADING FIRST");
       return {
         //초기값 얕은 복사
         ...state,

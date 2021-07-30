@@ -133,22 +133,26 @@ router.get("/skip/:skip", /*#__PURE__*/function () {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.prev = 0;
-            _context2.next = 3;
+            // test용으로 작성한 post 전체 삭제 메시지.
+            // await Post.deleteMany({});
+            // await Category.deleteMany({});
+            console.log("load post");
+            _context2.next = 4;
             return _post["default"].countDocuments();
 
-          case 3:
+          case 4:
             postCount = _context2.sent;
-            _context2.next = 6;
+            _context2.next = 7;
             return _post["default"].find().skip(Number(req.params.skip)).limit(6).sort({
               date: -1
             });
 
-          case 6:
+          case 7:
             postFindResult = _context2.sent;
-            _context2.next = 9;
+            _context2.next = 10;
             return _category["default"].find();
 
-          case 9:
+          case 10:
             categoryFindResult = _context2.sent;
             result = {
               postFindResult: postFindResult,
@@ -156,23 +160,23 @@ router.get("/skip/:skip", /*#__PURE__*/function () {
               postCount: postCount
             };
             res.json(result);
-            _context2.next = 18;
+            _context2.next = 19;
             break;
 
-          case 14:
-            _context2.prev = 14;
+          case 15:
+            _context2.prev = 15;
             _context2.t0 = _context2["catch"](0);
             console.log(_context2.t0);
             res.json({
               msg: "더 이상 포스트가 없습니다."
             });
 
-          case 18:
+          case 19:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 14]]);
+    }, _callee2, null, [[0, 15]]);
   }));
 
   return function (_x4, _x5) {

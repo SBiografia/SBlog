@@ -74,7 +74,7 @@ router.get("/skip/:skip", async (req, res) => {
     // test용으로 작성한 post 전체 삭제 메시지.
     // await Post.deleteMany({});
     // await Category.deleteMany({});
-
+    console.log("load post");
     const postCount = await Post.countDocuments();
 
     //sort({date:-1}) : -1을 하면 최신부터 하게 됨.
