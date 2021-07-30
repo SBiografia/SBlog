@@ -42,7 +42,7 @@ app.use((0, _helmet["default"])({
       defaultSrc: ["'self'", "'unsafe-inline'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "http://sbiografia.com", "http://*.sbiografia.com", "http://13.124.207.208"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      connectSrc: ["'unsafe-inline'", "http://sbiografia.com", "http://*.sbiografia.com", "http://13.124.207.208", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208"],
+      connectSrc: ["'unsafe-inline'", "http://sbiografia.com", "http://*.sbiografia.com", "http://13.124.207.208"],
       imgSrc: ["*", "'self'", "https://sblog2021.s3.ap-northeast-2.amazonaws.com", "https://sblog2021.s3.ap-northeast-2.amazonaws.com/upload", "http://sbiografia.com", "http://*.sbiografia.com", "http://13.124.207.208", "https://sbiografia.com", "https://*.sbiografia.com", "https://13.124.207.208", "data:*"],
       fontSrc: ["'self'", "http:"]
     }
@@ -107,12 +107,13 @@ app.use("/api/search", _search["default"]); //서버쪽에는 주소가 다 api�
 //프론트에서 서버를 접근할 때는 api가 붙으니까 위에 route들이 실행되는데,
 //일반 유저가 접근할 때는 api가 없는 주소이니 위에 코드들이 실행이 안되고, 아래에 있는 코드가 실행 됨.
 //즉, 위에 있는 api로 실행되는 주소 외에 "*" 모든 주소들은 아래 주소들로 실행이 됨. client/build/index.html
-// if (prod) {
-//   app.use(express.static(path.join(__dirname, "../client/build")));
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
-//   });
-// }
+
+if (prod) {
+  app.use(_express["default"]["static"](_path["default"].join(__dirname, "../client/build")));
+  app.get("*", function (req, res) {
+    res.sendFile(_path["default"].resolve(__dirname, "../client/build", "index.html"));
+  });
+}
 
 var _default = app;
 exports["default"] = _default;

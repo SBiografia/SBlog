@@ -37,9 +37,6 @@ app.use(
           "http://sbiografia.com",
           "http://*.sbiografia.com",
           "http://13.124.207.208",
-          "https://sbiografia.com",
-          "https://*.sbiografia.com",
-          "https://13.124.207.208",
         ],
         imgSrc: [
           "*",
@@ -125,11 +122,11 @@ app.use("/api/search", searchRoutes);
 //일반 유저가 접근할 때는 api가 없는 주소이니 위에 코드들이 실행이 안되고, 아래에 있는 코드가 실행 됨.
 //즉, 위에 있는 api로 실행되는 주소 외에 "*" 모든 주소들은 아래 주소들로 실행이 됨. client/build/index.html
 
-// if (prod) {
-//   app.use(express.static(path.join(__dirname, "../client/build")));
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
-//   });
-// }
+if (prod) {
+  app.use(express.static(path.join(__dirname, "../client/build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+  });
+}
 
 export default app;
