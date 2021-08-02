@@ -101,7 +101,8 @@ _mongoose["default"].connect(MONGO_URI, {
 
 
 app.all("*", function (req, res, next) {
-  console.log(req);
+  console.log(req.headers[host]);
+  console.log(req.headers[origin]);
   console.log(req.hostname);
   console.log(req.originalUrl);
 
