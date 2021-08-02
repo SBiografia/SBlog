@@ -101,12 +101,8 @@ _mongoose["default"].connect(MONGO_URI, {
 
 
 app.all("*", function (req, res, next) {
-  console.log(req.headers.host);
-  console.log(req.headers.origin);
-  console.log(req.hostname);
-  console.log(req.originalUrl);
-
   if (req.hostname === "13.124.207.208") {
+    console.log("redirect ip to domain and url is :", req.originalUrl);
     res.redirect("https://sbiografia.com".concat(req.originalUrl));
   }
 }); //Use routes
