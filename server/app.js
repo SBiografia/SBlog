@@ -114,6 +114,16 @@ mongoose
 //   }
 // });
 
+//IP주소로 접근 시, 도메인으로 변경해주는 코드
+app.all("*", (req, res, next) => {
+  console.log(req);
+  console.log(req.hostname);
+  console.log(req.originalUrl);
+  if (req.hostname === "13.124.207.208") {
+    res.redirect(`https://sbiografia.com${req.originalUrl}`);
+  }
+});
+
 //Use routes
 app.use("/api/post", postRoutes);
 app.use("/api/user", userRoutes);
