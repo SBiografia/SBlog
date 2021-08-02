@@ -98,16 +98,13 @@ _mongoose["default"].connect(MONGO_URI, {
 //   }
 // });
 //IP주소로 접근 시, 도메인으로 변경해주는 코드
-// app.all("*", (req, res, next) => {
 
 
 app.use("/", function (req, res, next) {
   var hostName = req.hostname;
   var addUrl = req.originalUrl;
-  console.log("hoho");
 
   if (hostName !== "13.124.207.208") {
-    console.log("not ip");
     next();
   } else {
     console.log("redirect ip to domain and url is :", addUrl);
