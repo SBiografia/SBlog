@@ -17,8 +17,20 @@ const PostCardList = () => {
     (state) => state.post
   );
   const dispatch = useDispatch();
+
   //option (TRUE)= infinite Scroll, option(FALSE) = button
-  const infiniteScrollOption = true;
+  let infiniteScrollOption = true;
+
+  // 익스플로러(Internet Explorer) 체크
+  var agent = navigator.userAgent.toLowerCase();
+  if (
+    (navigator.appName == "Netscape" &&
+      navigator.userAgent.search("Trident") != -1) ||
+    agent.indexOf("msie") != -1
+  ) {
+    alert("인터넷 익스플로러 브라우저입니다!");
+    infiniteScrollOption = false;
+  }
 
   useEffect(() => {
     dispatch({ type: POST_LOADING_REQUEST_FIRST, payload: 0 });
