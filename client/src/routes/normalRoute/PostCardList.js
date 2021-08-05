@@ -28,7 +28,6 @@ const PostCardList = () => {
       navigator.userAgent.search("Trident") != -1) ||
     agent.indexOf("msie") != -1
   ) {
-    alert("인터넷 익스플로러 브라우저입니다!");
     infiniteScrollOption = false;
   }
 
