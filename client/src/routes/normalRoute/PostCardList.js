@@ -113,29 +113,35 @@ const PostCardList = () => {
       //observer를 달아줌. InterserctionObserver란 임계값(threshold)이 바뀌게 되면 인터섹션옵저버 객체의 콜백함수를 실행
       //여기 프로젝트에서는 lastPostElementRef 값을 달아놓은 div 값이 안보이다가 임계값만큼 변하게 되면 실행되는 것임.
       // 익스플로러에서는 인터섹션 옵저버 방식이 안먹힘..바벨로도 안됨...
-      const observer = new IntersectionObserver(([entry]) => {
-        //처음에 postCount 값을 받아오기 전에 isintersecting이 감지되버리면 postCount=0인 상태에서 remain이 -값이 되어서 endMsg=True가 됨.
-        //처음에 loading을 하면서 감지되어서 여러번 REQ를 dispatch하는 것 방지를 위해서
-        //prevInterSectionRect.y 값을 비교해서 동일한 위치에서 감지되면 if문 안넘어가도록 해줬음.
-        if (
-          postCount > 0 &&
-          entry.isIntersecting &&
-          prevInterSectingRect !== entry.intersectionRect.y
-        ) {
-          prevInterSectingRect = entry.intersectionRect.y;
-          let remainPostCount = postCountRef.current - skipNumberRef.current;
-          if (remainPostCount >= 0) {
-            dispatch({
-              type: POST_LOADING_REQUEST,
-              payload: skipNumberRef.current + 6,
-            });
-            skipNumberRef.current += 6;
-          } else {
-            endMsg.current = true;
-            setEndCheck(true);
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          //처음에 postCount 값을 받아오기 전에 isintersecting이 감지되버리면 postCount=0인 상태에서 remain이 -값이 되어서 endMsg=True가 됨.
+          //처음에 loading을 하면서 감지되어서 여러번 REQ를 dispatch하는 것 방지를 위해서
+          //prevInterSectionRect.y 값을 비교해서 동일한 위치에서 감지되면 if문 안넘어가도록 해줬음.
+          if (
+            postCount > 0 &&
+            entry.isIntersecting &&
+            prevInterSectingRect !== entry.intersectionRect.y
+          ) {
+            prevInterSectingRect = entry.intersectionRect.y;
+            let remainPostCount = postCountRef.current - skipNumberRef.current;
+            if (remainPostCount >= 0) {
+              dispatch({
+                type: POST_LOADING_REQUEST,
+                payload: skipNumberRef.current + 6,
+              });
+              skipNumberRef.current += 6;
+            } else {
+              endMsg.current = true;
+              setEndCheck(true);
+            }
           }
+        },
+        {
+          rootMargin: "0px",
+          threshold: "0.9",
         }
-      }, options);
+      );
       //lastPostElementRef값이 달려있으면 observer에 달아주는데,
       if (lastPostElementRef.current) {
         observer.observe(lastPostElementRef.current);
