@@ -13,6 +13,9 @@ const BannerIE = () => {
   const onRedirectEdge = () => {
     window.location = "microsoft-edge:" + window.location.href;
   };
+  const onRedirectChrome = () => {
+    window.location = "https://www.google.com/intl/ko/chrome/";
+  };
 
   const EdgeButton = (
     <Fragment>
@@ -32,7 +35,7 @@ const BannerIE = () => {
           </Button>
         </Col>
         <Col className="col-md-3 me-md-3 d-flex justify-content-center">
-          <Button outline size="lg" color="danger" onClick={onRedirectEdge}>
+          <Button outline size="lg" color="danger" onClick={onRedirectChrome}>
             <img
               style={{ height: "3rem" }}
               src={ChromeIMGsrc}
