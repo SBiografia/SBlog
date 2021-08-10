@@ -10,11 +10,11 @@ const App = () => {
   console.log("start");
 
   const [isIe, setIsIe] = useState(false);
-  const isIE = () => {
-    if (
-      navigator.userAgent.indexOf("MSIE") !== -1 ||
-      navigator.userAgent.indexOf("Trident") !== -1
-    ) {
+
+  const checkIE = () => {
+    if (navigator.userAgent.indexOf("Trident") > 0) {
+      setIsIe(true);
+    } else if (/MSIE \d |Trident.*rv:/.test(navigator.userAgent)) {
       setIsIe(true);
     }
   };
@@ -22,7 +22,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        {isIE ? <BannerIE /> : <MyRouter />}
+        {checkIE ? <BannerIE /> : <MyRouter />}
       </ConnectedRouter>
     </Provider>
   );
