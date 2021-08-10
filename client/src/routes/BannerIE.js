@@ -26,7 +26,7 @@ const BannerIE = () => {
       <Header />
 
       <Container id="main-body">
-        {<h1 style="text-align:center">이 브라우저는 오래 되었습니다.</h1>}
+        {<h1> 이 브라우저는 오래 되었습니다.</h1>}
         {EdgeButton}
       </Container>
       <Footer />
