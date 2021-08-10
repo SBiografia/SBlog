@@ -64,22 +64,8 @@ app.use(
 //보통 SPA에서는 react, vue나 같은 SPA에서는 서버에서 설정을 해주는데
 //origin이라 함은 허락하고자 하는 주소를 말하는데, true를 적으면 모두 허용해주게 됨
 //credentials 는 지금 설정한 cors를 브라우저의 헤더에 추가하게 됨
-//아래 코드는 greenlock(https) 해주기 전의 코드
-app.use(cors({ origin: true, credentials: true }));
 
-//greenlock 적용 이후 코드
-// if (prod) {
-//   console.log("prod is ok");
-//   app.use(
-//     cors({
-//       origin: ["https://sbiografia.com", /\.sbiografia\.com$/],
-//       credentials: true,
-//     })
-//   );
-// } else {
-//   app.use(morgan("dev"));
-//   app.use(cors({ origin: true, credentials: true }));
-// }
+app.use(cors({ origin: true, credentials: true }));
 
 //morgan은 개발할 때 log를 볼 수 있게 해주는 것
 app.use(morgan("dev"));
@@ -115,17 +101,18 @@ mongoose
 // });
 
 //IP주소로 접근 시, 도메인으로 변경해주는 코드
-app.use("/", (req, res, next) => {
-  let hostName = req.hostname;
-  let addUrl = req.originalUrl;
-  if (hostName !== "13.124.207.208") {
-    next();
-  } else {
-    console.log("redirect ip to domain and url is :", addUrl);
-    res.redirect(`https://sbiografia.com${addUrl}`);
-  }
-});
-
+if (prod) {
+  app.use("/", (req, res, next) => {
+    let hostName = req.hostname;
+    let addUrl = req.originalUrl;
+    if (hostName !== "13.124.207.208") {
+      next();
+    } else {
+      console.log("redirect ip to domain and url is :", addUrl);
+      res.redirect(`https://sbiografia.com${addUrl}`);
+    }
+  });
+}
 //Use routes
 app.use("/api/post", postRoutes);
 app.use("/api/user", userRoutes);
