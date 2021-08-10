@@ -12,8 +12,8 @@ const App = () => {
   const [isIe, setIsIe] = useState(false);
   const isIE = () => {
     if (
-      navigator.userAgent.indexOf("MSIE") != -1 ||
-      !!document.documentMode == true
+      navigator.userAgent.indexOf("MSIE") !== -1 ||
+      navigator.userAgent.indexOf("Trident") !== -1
     ) {
       setIsIe(true);
     }
