@@ -13,9 +13,9 @@ const App = () => {
 
   const checkIE = () => {
     if (navigator.userAgent.indexOf("Trident") > 0) {
-      setIsIe(true);
+      return true;
     } else if (/MSIE \d |Trident.*rv:/.test(navigator.userAgent)) {
-      setIsIe(true);
+      return true;
     }
   };
 
