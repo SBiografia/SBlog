@@ -5,10 +5,26 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <!-- IE 호환-->
+
+    <!-- IE x 엣지 호환-->
+    <!-- 
+    <script type="text/JavaScript">
+      let userAgent = window.navigator.userAgent.toLowerCase();
+
+      let isChrome = userAgent.indexOf('chrome');
+      let isEdge = userAgent.indexOf('edge');
+      let isIE = userAgent.indexOf('trident');
+      if(isChrome > -1)
+      { if(isEdge > -1){ //Edge는 Chrome과 Edge 모두의 값을 가지고 있기 때문에
+        console.log("Edge 브라우저");
+      }
+      else { console.log("Chrome 브라우저"); } }
+      else { console.log("Chrome이 아닙니다"); }
+    </script>
+
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"></script>
-    <script src="https://raw.githubusercontent.com/w3c/IntersectionObserver/master/polyfill/intersection-observer.js"></script>
+    <script src="https://raw.githubusercontent.com/w3c/IntersectionObserver/master/polyfill/intersection-observer.js"></script> -->
 
     <meta
       name="description"
